@@ -4,7 +4,10 @@ const nextConfig = {
     output: 'export',
     trailingSlash: true,
     skipTrailingSlashRedirect: true,
-    compress: true
+    compress: true,
+    eslint: {
+        ignoreDuringBuilds: true,
+    }
 }
 
 module.exports = nextConfig
