@@ -101,7 +101,7 @@ export default function SurveyQuestion({ index, source, onEdit, onMove, onDelete
                                             <input type={"text"} defaultValue={option} onInput={(ev) => {
                                                 //@ts-ignore
                                                 edit(index, ev.target.value)
-                                            }} className={"outline-none bg-transparent border-b border-b-zinc-600"} placeholder={`Choice ${index + 1}`}/>
+                                            }} className={"outline-none bg-transparent border-b border-b-zinc-600 max-w-[75%] md:max-w-full"} placeholder={`Choice ${index + 1}`}/>
                                         </div>
                                         <div className={"flex flex-row gap-2"}>
                                             <button onClick={() => move(true, index)} className={"clickable-hover-opacity"}><ChevronUp size={24}/></button>
