@@ -1,4 +1,3 @@
-import Image from "next/image";
 import {adventPro} from "@/app/_app";
 import {SiDiscord, SiGithub} from "@icons-pack/react-simple-icons";
 
@@ -7,7 +6,7 @@ export const Footer = () => {
       <footer className={"flex flex-col border-t border-t-zinc-900 pt-12"}>
           <section className={"flex flex-col gap-1 md:flex-row md:items-center md:justify-between select-none"}>
               <div className={"flex flex-col gap-1 select-none"}>
-                  <Image width={128} height={128} src={"/flyght-256px-light.png"} alt={"Flyght Logo (Light)"} className={"w-12 h-12 select-none"}/>
+                  <img src={"/flyght-256px-light.png"} alt={"Flyght Logo (Light)"} className={"w-12 h-12 select-none"}/>
                   <h3 className={`${adventPro.className} lowercase text-4xl`}>Flyght.</h3>
               </div>
               <div className={"my-2"}>

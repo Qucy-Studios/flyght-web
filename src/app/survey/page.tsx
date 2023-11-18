@@ -6,7 +6,6 @@ import {useEffect, useState} from "react";
 import {clientToNativeKind, createRandomKey, NativeQuestion, nativeToClient, Question} from "@/app/_types/question";
 import SurveyQuestion, {availableKinds} from "@/app/_components/survey/SurveyQuestion";
 import {ListChecks, ListTodo, Save, TerminalSquare} from "lucide-react";
-import Image from "next/image";
 import {Token} from "@/app/_types/token";
 import {Survey} from "@/app/_types/survey";
 
@@ -319,7 +318,7 @@ function Loading() {
     return (
         <div className="flex flex-col gap-2 py-12 m-auto align-middle justify-center items-center">
             <section id={"hero"} className={"flex flex-col gap-3"}>
-                <Image width={128} height={128} src={"/flyght-256px-light.png"} alt={"Flyght Logo (Light)"} className={"animate-bounce duration-700 transition ease-in-out w-12 h-12 select-none"}/>
+                <img src={"/flyght-256px-light.png"} alt={"Flyght Logo (Light)"} className={"animate-bounce duration-700 transition ease-in-out w-12 h-12 select-none"}/>
             </section>
         </div>
     )
