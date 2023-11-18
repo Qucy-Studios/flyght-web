@@ -95,13 +95,13 @@ export default function SurveyQuestion({ index, source, onEdit, onMove, onDelete
                         <div className={"flex flex-col gap-2 py-4"}>
                             {question.choices.map((option, index) => {
                                 return (
-                                    <div className={"flex flex-row justify-between items-center"}>
+                                    <div className={"flex flex-row justify-between items-center gap-4"}>
                                         <div className={"flex flex-row gap-2 items-center max-w-[75%] md:max-w-full"}>
                                             <CornerDownRight size={18} className={"text-zinc-300"}/>
                                             <input type={"text"} defaultValue={option} onInput={(ev) => {
                                                 //@ts-ignore
                                                 edit(index, ev.target.value)
-                                            }} className={"outline-none bg-transparent border-b border-b-zinc-600"} placeholder={`Choice ${index + 1}`}/>
+                                            }} className={"outline-none bg-transparent border-b border-b-zinc-600 w-full"} placeholder={`Choice ${index + 1}`}/>
                                         </div>
                                         <div className={"flex flex-row gap-2"}>
                                             <button onClick={() => move(true, index)} className={"clickable-hover-opacity"}><ChevronUp size={24}/></button>
