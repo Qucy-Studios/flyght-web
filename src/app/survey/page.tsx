@@ -14,6 +14,9 @@ export default function SurveyEditor() {
     const searchParams = useSearchParams()
     const accessToken = searchParams.get('access_token')
 
+    // Flyght Origin (used by setup command)
+    const origin = searchParams.get('origin')
+
     useEffect(() => { window.history.replaceState(null, '', '/survey') }, [accessToken]);
     if (accessToken == null) return (<InvalidLink/>)
 
@@ -32,7 +35,7 @@ export default function SurveyEditor() {
         fetch(`${process.env.NEXT_PUBLIC_BACKEND_ADDRESS}/token/exchange`, {
             method: 'POST',
             headers: {
-                Authorization: accessToken
+                Authorization: accessToken,
             }
         }).then(async (response) => {
             if (!response.ok) {
@@ -134,6 +137,12 @@ export default function SurveyEditor() {
         let hasErrors = false
         let copy = [] as Question[]
 
+        if (questions.length < 1) {
+            setErrors(["You cannot save an empty survey. Please add at least one question."])
+            setSaving(false)
+            return
+        }
+
         for (let question of questions) {
             if (question.errors.length > 0) {
                 question.errors = []
@@ -179,7 +188,8 @@ export default function SurveyEditor() {
                     method: 'POST',
                     headers: {
                         Authorization: openToken,
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'X-Flyght-Origin': origin ?? undefined
                     },
                     body: JSON.stringify(native)
                 })
