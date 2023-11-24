@@ -186,6 +186,7 @@ export default function SurveyEditor() {
             try {
                 const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_ADDRESS}/survey`, {
                     method: 'POST',
+                    //@ts-ignore
                     headers: {
                         Authorization: openToken,
                         'Content-Type': 'application/json',
