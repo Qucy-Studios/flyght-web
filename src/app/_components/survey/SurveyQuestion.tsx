@@ -13,7 +13,7 @@ type SurveyQuestionProps = {
     onDelete: () => void
 }
 
-export const availableKinds = ["Single-choice", "Multi-choice", "Prompt"]
+export const availableKinds = ["Single-choice", "Multi-choice", "Prompt", "Yes or No"]
 const numberFormat = Intl.NumberFormat('en-US')
 
 export default function SurveyQuestion({ index, source, onEdit, onMove, onDelete }: SurveyQuestionProps) {
