@@ -110,6 +110,11 @@ export default function SurveyEditor() {
     function addQuestion(kind: "Single-choice" | "Multi-choice" | "Prompt" | "Yes or No") {
         if (questions.length >= 5) return
         setQuestions([...questions, {choices: [], question: '', kind: kind, errors: []}])
+
+        setTimeout(() => window.scrollTo({
+            top: document.body.scrollHeight,
+            behavior: 'smooth'
+        }), 100)
     }
 
     function removeIndex(index: number) {
