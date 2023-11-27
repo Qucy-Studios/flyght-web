@@ -19,7 +19,8 @@ export const NativeKindMappings = new Map<string, string>(
     [
         ["Prompt", "PROMPT"],
         ["Multi-choice", "MULTIPLE_CHOICE"],
-        ["Single-choice", "SINGLE_CHOICE"]
+        ["Single-choice", "SINGLE_CHOICE"],
+        ["Yes or No", "YES_OR_NO"]
     ]
 )
 export function clientToNativeKind(kind: string): string {

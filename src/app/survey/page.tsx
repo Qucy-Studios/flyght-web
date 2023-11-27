@@ -5,7 +5,7 @@ import SurveyPrompt from "@/app/_components/survey/SurveyPrompt";
 import {useEffect, useState} from "react";
 import {clientToNativeKind, createRandomKey, NativeQuestion, nativeToClient, Question} from "@/app/_types/question";
 import SurveyQuestion, {availableKinds} from "@/app/_components/survey/SurveyQuestion";
-import {ListChecks, ListTodo, Save, TerminalSquare} from "lucide-react";
+import {ListChecks, ListTodo, Save, TerminalSquare, ToggleRight} from "lucide-react";
 import {Token} from "@/app/_types/token";
 import {Survey} from "@/app/_types/survey";
 
@@ -107,7 +107,7 @@ export default function SurveyEditor() {
     if (existingSurvey == null || questions == null) {
         return (<InvalidLink/>)
     }
-    function addQuestion(kind: "Single-choice" | "Multi-choice" | "Prompt") {
+    function addQuestion(kind: "Single-choice" | "Multi-choice" | "Prompt" | "Yes or No") {
         if (questions.length >= 5) return
         setQuestions([...questions, {choices: [], question: '', kind: kind, errors: []}])
     }
@@ -230,6 +230,9 @@ export default function SurveyEditor() {
                 </button>
                 <button onClick={() => addQuestion('Multi-choice')} className={"clickable-hover-opacity"}>
                     <ListChecks size={24}/>
+                </button>
+                <button onClick={() => addQuestion('Yes or No')} className={"clickable-hover-opacity"}>
+                    <ToggleRight size={24}/>
                 </button>
                 <button onClick={save} className={"clickable-hover-opacity"}>
                     <Save size={24}/>

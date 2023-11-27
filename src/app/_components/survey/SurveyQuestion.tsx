@@ -91,7 +91,7 @@ export default function SurveyQuestion({ index, source, onEdit, onMove, onDelete
                         />
                         <p className={"text-xs text-zinc-700"}>{numberFormat.format(question.question.length)} / 1,024</p>
                     </div>
-                    {question.kind === 'Prompt' ? null : (
+                    {question.kind === 'Prompt' || question.kind === 'Yes or No' ? null : (
                         <div className={"flex flex-col gap-2 py-4"}>
                             {question.choices.map((option, index) => {
                                 return (
