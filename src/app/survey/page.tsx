@@ -152,6 +152,10 @@ export default function SurveyEditor() {
             if (question.errors.length > 0) {
                 question.errors = []
             }
+            if (question.choices.length == 0 && !(question.kind === 'Prompt' || question.kind === 'Yes or No')) {
+                question.errors = [...question.errors, 'You need to have at least 1 choice in choice-based question.']
+                hasErrors = true
+            }
             if (question.choices.length > 10) {
                 question.errors = [...question.errors, 'You cannot add more than 10 choices.']
                 hasErrors = true
