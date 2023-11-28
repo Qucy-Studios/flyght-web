@@ -98,10 +98,11 @@ export default function SurveyQuestion({ index, source, onEdit, onMove, onDelete
                                     <div className={"flex flex-row justify-between items-center gap-4"}>
                                         <div className={"flex flex-row gap-2 items-center max-w-[75%] md:max-w-full"}>
                                             <CornerDownRight size={18} className={"text-zinc-300"}/>
-                                            <input type={"text"} defaultValue={option} onInput={(ev) => {
+                                            <input type={"text"} maxLength={100} minLength={1} defaultValue={option} onInput={(ev) => {
                                                 //@ts-ignore
                                                 edit(index, ev.target.value)
                                             }} className={"outline-none bg-transparent border-b border-b-zinc-600 w-full"} placeholder={`Choice ${index + 1}`}/>
+                                            <p className={"text-xs text-zinc-700"}>{numberFormat.format(100 - question.choices[index].length)}</p>
                                         </div>
                                         <div className={"flex flex-row gap-2"}>
                                             <button onClick={() => move(true, index)} className={"clickable-hover-opacity"}><ChevronUp size={24}/></button>

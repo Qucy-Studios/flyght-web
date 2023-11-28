@@ -156,6 +156,13 @@ export default function SurveyEditor() {
                 question.errors = [...question.errors, 'You cannot add more than 10 choices.']
                 hasErrors = true
             }
+            for (let choice of question.choices) {
+                if (choice.length > 100) {
+                    question.errors = [...question.errors, 'A choice cannot be more than 100 characters.']
+                    hasErrors = true
+                    break
+                }
+            }
             if (question.question.length > 1024) {
                 question.errors = [...question.errors, 'You can only write up to 1,024 characters for the question.']
                 hasErrors = true
