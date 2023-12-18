@@ -39,7 +39,7 @@ export default function Home() {
                 <Feature title={"Powerful."} Icon={Atom}>
                     Flyght was designed to support as many kinds of questions as possible
                     all within the Discord interface, no more answering via an external website, or
-                    related.
+                    related paireed with powerful features such as webhooks and many more!
                 </Feature>
                 <Feature title={"User Friendly."} Icon={SmilePlus}>
                     Designed with user-experience in mind, Flyght was built to be incredibly user-friendly, making
