@@ -326,6 +326,7 @@ export default function SurveyEditor() {
                 {questions.map((question, index) => {
                     return (
                         <SurveyQuestion
+                            key={question.kind+"-"+index}
                             index={index}
                             source={question}
                             onEdit={(copy) => {
