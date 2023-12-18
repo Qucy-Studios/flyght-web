@@ -37,7 +37,7 @@ export default function Home() {
             </section>
             <section className={"py-8 grid grrd-cols-1 md:grid-cols-2 gap-4 border-t border-zinc-900"}>
                 <Feature title={"Powerful."} Icon={Atom}>
-                    Flyght was designed to support as kinds of questions as possible
+                    Flyght was designed to support as many kinds of questions as possible
                     all within the Discord interface, no more answering via an external website, or
                     related.
                 </Feature>
