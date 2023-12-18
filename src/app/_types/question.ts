@@ -20,9 +20,13 @@ export const NativeKindMappings = new Map<string, string>(
         ["Prompt", "PROMPT"],
         ["Multi-choice", "MULTIPLE_CHOICE"],
         ["Single-choice", "SINGLE_CHOICE"],
-        ["Yes or No", "YES_OR_NO"]
+        ["Yes or No", "YES_OR_NO"],
+        ["Text Block", "TEXT_BLOCK"]
     ]
 )
+export function isNonDecorative(kind: string) {
+    return kind !== 'Text Block'
+}
 export function clientToNativeKind(kind: string): string {
     return NativeKindMappings.get(kind)!!
 }

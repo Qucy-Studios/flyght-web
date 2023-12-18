@@ -1,4 +1,4 @@
-import {ListChecks, ListTodo, Terminal, ToggleRight} from "lucide-react";
+import {ListChecks, ListTodo, Terminal, Text, ToggleRight} from "lucide-react";
 
 export default function SurveyPrompt() {
     return (
@@ -22,6 +22,8 @@ export default function SurveyPrompt() {
                 <span className={"text-blue-400 inline-block"}><ListChecks size={18}/></span> will add a <b>multi-choice</b> question.
                 <br/>
                 <span className={"text-blue-400 inline-block"}><ToggleRight size={18}/></span> will add a <b>yes or no</b> question.
+                <br/>
+                <span className={"text-blue-400 inline-block"}><Text size={18}/></span> will add a <b>text block</b> (non-question).
             </p>
         </div>
     )

@@ -3,9 +3,16 @@
 import {useSearchParams} from "next/navigation";
 import SurveyPrompt from "@/app/_components/survey/SurveyPrompt";
 import {useEffect, useState} from "react";
-import {clientToNativeKind, createRandomKey, NativeQuestion, nativeToClient, Question} from "@/app/_types/question";
+import {
+    clientToNativeKind,
+    createRandomKey,
+    isNonDecorative,
+    NativeQuestion,
+    nativeToClient,
+    Question
+} from "@/app/_types/question";
 import SurveyQuestion, {availableKinds} from "@/app/_components/survey/SurveyQuestion";
-import {ListChecks, ListTodo, Save, TerminalSquare, ToggleRight} from "lucide-react";
+import {ListChecks, ListTodo, Save, TerminalSquare, Text, ToggleRight} from "lucide-react";
 import {Token} from "@/app/_types/token";
 import {Survey} from "@/app/_types/survey";
 
@@ -107,8 +114,22 @@ export default function SurveyEditor() {
     if (existingSurvey == null || questions == null) {
         return (<InvalidLink/>)
     }
-    function addQuestion(kind: "Single-choice" | "Multi-choice" | "Prompt" | "Yes or No") {
-        if (questions.length >= 5) return
+    function calculateSizes() {
+        let [textBlocks, nonDecoratives] = [0, 0]
+        for (let question of questions) {
+            if (question.kind === 'Text Block') {
+                textBlocks++
+                continue
+            }
+
+            nonDecoratives++
+        }
+        return { textBlocks, nonDecoratives }
+    }
+    function addQuestion(kind: "Single-choice" | "Multi-choice" | "Prompt" | "Yes or No" | "Text Block") {
+        const { textBlocks, nonDecoratives } =  calculateSizes()
+        if (kind === 'Text Block' && textBlocks >= 2) return;
+        if (isNonDecorative(kind) && nonDecoratives >= 5)  return;
         setQuestions([...questions, {choices: [], question: '', kind: kind, errors: []}])
 
         setTimeout(() => window.scrollTo({
@@ -152,7 +173,7 @@ export default function SurveyEditor() {
             if (question.errors.length > 0) {
                 question.errors = []
             }
-            if (question.choices.length == 0 && !(question.kind === 'Prompt' || question.kind === 'Yes or No')) {
+            if (question.choices.length == 0 && !(question.kind === 'Prompt' || question.kind === 'Yes or No' || question.kind === 'Text Block')) {
                 question.errors = [...question.errors, 'You need to have at least 1 choice in choice-based question.']
                 hasErrors = true
             }
@@ -219,6 +240,7 @@ export default function SurveyEditor() {
                             `Failed to save survey, unable to decipher. Server returned a status ${response.status} (${response.statusText}) code.`
                         ])
                     }
+                    setSaving(false)
                     return
                 }
                 setUsedToken(true)
@@ -237,7 +259,7 @@ export default function SurveyEditor() {
     return (
         <div className={"flex flex-col gap-2 py-12"}>
             <SurveyPrompt/>
-            <div className={"w-full border-zinc-800 backdrop-blur bg-opacity-30 border rounded p-3 px-8 flex flex-row justify-between items-center"}>
+            <div className={"w-full border-zinc-800 backdrop-blur bg-opacity-30 border rounded p-3 px-8 flex flex-row flex-wrap justify-between items-center"}>
                 <button onClick={() => addQuestion('Prompt')} className={"clickable-hover-opacity"}>
                     <TerminalSquare size={24}/>
                 </button>
@@ -249,6 +271,9 @@ export default function SurveyEditor() {
                 </button>
                 <button onClick={() => addQuestion('Yes or No')} className={"clickable-hover-opacity"}>
                     <ToggleRight size={24}/>
+                </button>
+                <button onClick={() => addQuestion('Text Block')} className={"clickable-hover-opacity"}>
+                    <Text size={24}/>
                 </button>
                 <button onClick={save} className={"clickable-hover-opacity"}>
                     <Save size={24}/>
@@ -268,17 +293,36 @@ export default function SurveyEditor() {
                         </div>
                     </div>
                 ) : null}
-                {questions.length >= 5 ? (
-                    <div className={"flex flex-col gap-2 h-full relative border-zinc-800 backdrop-blur bg-opacity-30 border rounded p-8"}>
-                        <div className={"heropattern-graphpaper-zinc-900/50 absolute h-full w-full top-0 left-0 -z-20"}></div>
-                        <h3 className={`font-bold text-lg`}>Maximum Questions Reached</h3>
-                        <p className={"font-light text-sm max-w-sm"}>
-                            Currently, you can only add five (5) questions at maximum.
-                            We plan to improve our system even more and support even more characters, choices,
-                            questions and even more in the future!
-                        </p>
-                    </div>
-                ) : null}
+                {(() => {
+                    let { textBlocks, nonDecoratives } = calculateSizes()
+                    return (
+                        <>
+                            { textBlocks >= 2 ? (
+                                <div className={"flex flex-col gap-2 h-full relative border-zinc-800 backdrop-blur bg-opacity-30 border rounded p-8 my-1"}>
+                                    <div className={"heropattern-graphpaper-zinc-900/50 absolute h-full w-full top-0 left-0 -z-20"}></div>
+                                    <h3 className={`font-bold text-lg`}>Maximum Text Blocks Reached</h3>
+                                    <p className={"font-light text-sm max-w-sm"}>
+                                        Currently, you can only add 2 (2) text blocks at maximum.
+                                        We plan to improve our system even more and support even more characters, choices,
+                                        questions and even more in the future!
+                                    </p>
+                                </div>
+                            ) : null}
+                            {nonDecoratives >= 5 ? (
+                                <div className={"flex flex-col gap-2 h-full relative border-zinc-800 backdrop-blur bg-opacity-30 border rounded p-8 my-1"}>
+                                    <div className={"heropattern-graphpaper-zinc-900/50 absolute h-full w-full top-0 left-0 -z-20"}></div>
+                                    <h3 className={`font-bold text-lg`}>Maximum Questions Reached</h3>
+                                    <p className={"font-light text-sm max-w-sm"}>
+                                        Currently, you can only add five (5) questions at maximum.
+                                        We plan to improve our system even more and support even more characters, choices,
+                                        questions and even more in the future!
+                                    </p>
+                                </div>
+                            ) : null}
+                        </>
+                    )
+                })()}
+
                 {questions.map((question, index) => {
                     return (
                         <SurveyQuestion

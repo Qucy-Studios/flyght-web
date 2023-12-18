@@ -13,7 +13,7 @@ type SurveyQuestionProps = {
     onDelete: () => void
 }
 
-export const availableKinds = ["Single-choice", "Multi-choice", "Prompt", "Yes or No"]
+export const availableKinds = ["Single-choice", "Multi-choice", "Prompt", "Yes or No", "Text Block"]
 const numberFormat = Intl.NumberFormat('en-US')
 
 export default function SurveyQuestion({ index, source, onEdit, onMove, onDelete }: SurveyQuestionProps) {
@@ -91,7 +91,7 @@ export default function SurveyQuestion({ index, source, onEdit, onMove, onDelete
                         />
                         <p className={"text-xs text-zinc-700"}>{numberFormat.format(question.question.length)} / 1,024</p>
                     </div>
-                    {question.kind === 'Prompt' || question.kind === 'Yes or No' ? null : (
+                    {question.kind === 'Prompt' || question.kind === 'Yes or No' || question.kind === 'Text Block' ? null : (
                         <div className={"flex flex-col gap-2 py-4"}>
                             {question.choices.map((option, index) => {
                                 return (
