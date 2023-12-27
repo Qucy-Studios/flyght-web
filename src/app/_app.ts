@@ -14,11 +14,6 @@ export const playfairDisplay = Playfair_Display({
     variable: '--font-playfair',
 })
 
-
-export const josefinSans = Josefin_Sans({
-    subsets:  ['latin'],
-    variable: '--font-josefin-sans',
-})
 export const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 export const ggsans = localFont({
     src: [
