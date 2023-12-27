@@ -51,8 +51,10 @@ export default function SurveyEditor() {
                 try {
                     const { error } = await response.json() as { code: number, error: string }
                     setLoadError(error)
+                    setIsLoading(false)
                 } catch (err) {
                     setLoadError(`Failed to load existing survey, unable to decipher. Server returned a status ${response.status} (${response.statusText}) code.`)
+                    setIsLoading(false)
                 }
                 return
             }
@@ -94,15 +96,17 @@ export default function SurveyEditor() {
             if (survey.questions != null) {
                 setQuestions(nativeToClient(survey.questions) as Question[])
             }
-        }).then(() => setIsLoading(false)).catch((error) => {
-            let message = 'Unknown error.'
-            if (error instanceof Error) {
-                message = error.message;
-            } else if (typeof error === 'string') {
-                message = error;
-            }
-            setLoadError(message)
         })
+            .then(() => setIsLoading(false))
+            .catch((error) => {
+                let message = 'Unknown error.'
+                if (error instanceof Error) {
+                    message = error.message;
+                } else if (typeof error === 'string') {
+                    message = error;
+                }
+                setLoadError(message)
+            })
     }, [openToken]);
 
     if (isLoading) {
@@ -314,8 +318,8 @@ export default function SurveyEditor() {
                     return (
                         <SurveyQuestion
                             key={question.kind+"-"+index}
-                            index={index}
-                            source={question}
+                            position={index}
+                            question={question}
                             onEdit={(copy) => setQuestions(prevState => {
                                 let cpy = [...prevState]
                                 cpy[index] = copy

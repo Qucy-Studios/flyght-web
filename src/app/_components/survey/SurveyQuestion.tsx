@@ -7,8 +7,8 @@ import 'react-slidedown/lib/slidedown.css'
 import SurveyQuestionChoice from "@/app/_components/survey/SurveyQuestionChoice";
 
 type SurveyQuestionProps = {
-    index: number,
-    source: Question,
+    position: number,
+    question: Question,
     onEdit: (question: Question) => void
     onMove: (type: 'up' | 'down') => void,
     onDelete: () => void
@@ -17,17 +17,10 @@ type SurveyQuestionProps = {
 export const availableKinds = ["Single-choice", "Multi-choice", "Prompt", "Yes or No", "Text Block"]
 const numberFormat = Intl.NumberFormat('en-US')
 
-const SurveyQuestion = ({ index, source, onEdit, onMove, onDelete }: SurveyQuestionProps) => {
-    const [position, setPosition] = useState(index)
+const SurveyQuestion = ({ position, question, onEdit, onMove, onDelete }: SurveyQuestionProps) => {
     const [showSelectMenu, setShowSelectMenu] = useState(false)
-    const [question, setQuestion] = useState(source)
 
     const [showEmojiPicker, setShowEmojiPicker] = useState<Choice | null>(null)
-
-    useEffect(() => {
-        setPosition(index)
-        setQuestion(source)
-    }, [index, source]);
 
     function addOption() {
         onEdit({ ...question, choices: [...question.choices, { key: createRandomKey(), text: '', description: null, emoji: null }]})
@@ -129,7 +122,7 @@ const SurveyQuestion = ({ index, source, onEdit, onMove, onDelete }: SurveyQuest
                         if (choice === question.kind) return null
                         return (
                             <button
-                                key={`question-${index}-${choice}`}
+                                key={`question-${position}-${choice}`}
                                 onClick={() => {
                                 onEdit({ ...question, kind: choice })
 
