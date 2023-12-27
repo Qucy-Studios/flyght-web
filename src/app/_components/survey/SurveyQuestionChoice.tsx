@@ -52,7 +52,7 @@ export default function SurveyQuestionChoice({ emojiPicker, index, option, edit,
                         defaultValue={choice.text}
                         onInput={(ev) => {
                             //@ts-ignore
-                            edit(position, { text: ev.target.value, emoji: choice.emoji, description: choice.description })
+                            edit(position, { key: choice.key, text: ev.target.value, emoji: choice.emoji, description: choice.description })
                         }}
                     />
                     <p className={"px-1 text-xs text-zinc-700"}>{numberFormat.format(100 - choice.text.length)}</p>
@@ -60,11 +60,11 @@ export default function SurveyQuestionChoice({ emojiPicker, index, option, edit,
                 {showEmojiPicker === choice ? (
                     <EmojiPicker
                         emojiStyle={EmojiStyle.NATIVE}
-                        className={"py-2 max-w-[98%]"}
+                        className={"py-2 max-w-[98%] border-zinc-800 border bg-zinc-800 bg-opacity-30"}
                         theme={Theme.DARK}
                         skinTonesDisabled={true}
                         onEmojiClick={(emoji) => {
-                            edit(position, { text: choice.text, emoji: emoji.emoji, description: choice.description })
+                            edit(position, { key: choice.key, text: choice.text, emoji: emoji.emoji, description: choice.description })
                         }}
                     />
                 ) : null}
@@ -82,12 +82,12 @@ export default function SurveyQuestionChoice({ emojiPicker, index, option, edit,
                                 //@ts-ignore
                                 if (ev.target.value === '') {
                                     //@ts-ignore
-                                    edit(position, { text: choice.text, emoji: choice.emoji, description: null })
+                                    edit(position, { key: choice.key, text: choice.text, emoji: choice.emoji, description: null })
                                     return
                                 }
 
                                 //@ts-ignore
-                                edit(position, { text: choice.text, emoji: choice.emoji, description: ev.target.value })
+                                edit(position, { key: choice.key, text: choice.text, emoji: choice.emoji, description: ev.target.value })
                             }}
                         />
                         <p className={"px-1 text-xs text-zinc-700"}>{numberFormat.format(50 - (choice.description?.length ?? 0))}</p>

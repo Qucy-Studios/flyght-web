@@ -16,3 +16,18 @@ body {
     @apply hover:opacity-60 transition duration-500 ease-in-out
   }
 }
+
+.EmojiPickerReact.epr-dark-theme, .epr-search {
+  background-color: rgb(9 9 11 / 0.3) !important;
+}
+
+.EmojiPickerReact li.epr-emoji-category > .epr-emoji-category-label {
+  background-color: rgb(39 39 42 / 0.1) !important;
+}
+
+.EmojiPickerReact li.epr-emoji-category > .epr-emoji-category-content {
+  margin-top: 0.5rem !important;
+  margin-bottom: 0.5rem !important;
+  padding-top: 0.5rem !important;
+  padding-bottom: 0.5rem !important;
+}
