@@ -62,6 +62,9 @@ export default function SurveyQuestionChoice({ emojiPicker, index, option, edit,
                         emojiStyle={EmojiStyle.NATIVE}
                         className={"py-2 max-w-[98%] border-zinc-800 border bg-zinc-800 bg-opacity-30"}
                         theme={Theme.DARK}
+                        style={{
+                            width: "100%"
+                        }}
                         skinTonesDisabled={true}
                         onEmojiClick={(emoji) => {
                             edit(position, { key: choice.key, text: choice.text, emoji: emoji.emoji, description: choice.description })

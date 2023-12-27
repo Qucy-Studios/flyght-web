@@ -34,7 +34,7 @@ export default function SurveyQuestion({ index, source, onEdit, onMove, onDelete
     }
 
     return (
-        <div className={"flex flex-col gap-2 pt-1"}>
+        <div className={"flex flex-col gap-2 pt-1 lg:w-[480px]"}>
             <div className={"w-full border-zinc-800 backdrop-blur bg-opacity-30 border rounded"}>
                 <div className={"py-4 px-8"}>
                     {question.errors.length > 0 ? (
@@ -64,7 +64,7 @@ export default function SurveyQuestion({ index, source, onEdit, onMove, onDelete
                             className={"bg-transparent outline-none resize-none"}
                             draggable={false}
                             maxRows={4}
-                            placeholder={"Write the question here."}
+                            placeholder={question.kind === 'Text Block' ? "What do you want to inform the user?" : "What do you want to ask the user?"}
                             maxLength={1024}
                             defaultValue={question.question}
                             onInput={(ev) => {

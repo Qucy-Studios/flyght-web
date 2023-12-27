@@ -15,6 +15,8 @@ import SurveyQuestion, {availableKinds} from "@/app/_components/survey/SurveyQue
 import {Disc3, ListChecks, ListTodo, Save, TerminalSquare, Text, ToggleRight} from "lucide-react";
 import {Token} from "@/app/_types/token";
 import {Survey} from "@/app/_types/survey";
+import SurveyToolbar from "@/app/_components/survey/SurveyToolbar";
+import SurveyErrorBlock from "@/app/_components/survey/SurveyErrorBlock";
 
 export default function SurveyEditor() {
 
@@ -263,72 +265,48 @@ export default function SurveyEditor() {
     }
 
     return (
-        <div className={"flex flex-col gap-2 py-12"}>
-            <SurveyPrompt/>
-            <div className={"w-full border-zinc-800 backdrop-blur bg-opacity-30 border rounded p-3 px-8 flex flex-row flex-wrap justify-between items-center"}>
-                <button onClick={() => addQuestion('Prompt')} className={"clickable-hover-opacity"}>
-                    <TerminalSquare size={24}/>
-                </button>
-                <button onClick={() => addQuestion('Single-choice')} className={"clickable-hover-opacity"}>
-                    <ListTodo size={24}/>
-                </button>
-                <button onClick={() => addQuestion('Multi-choice')} className={"clickable-hover-opacity"}>
-                    <ListChecks size={24}/>
-                </button>
-                <button onClick={() => addQuestion('Yes or No')} className={"clickable-hover-opacity"}>
-                    <ToggleRight size={24}/>
-                </button>
-                <button onClick={() => addQuestion('Text Block')} className={"clickable-hover-opacity"}>
-                    <Text size={24}/>
-                </button>
-                <button onClick={save} className={"clickable-hover-opacity"}>
-                    <Save size={24}/>
-                </button>
-            </div>
-            <div>
-                {errors.length > 0 ? (
-                    <div className={"flex flex-col gap-2 h-full relative border-zinc-800 backdrop-blur bg-opacity-30 border rounded p-8"}>
-                        <div className={"heropattern-graphpaper-zinc-900/50 absolute h-full w-full top-0 left-0 -z-20"}></div>
-                        <h3 className={`font-bold text-lg`}>An error occurred while saving.</h3>
-                        <div className={"font-light text-sm max-w-sm flex flex-col gap-2"}>
-                            {errors.map((error) => {
-                                return (
-                                    <p className={"text-red-400"}>• {error}</p>
-                                )
-                            })}
-                        </div>
+        <div className={"flex flex-col lg:flex-row gap-2 lg:gap-4 py-12 lg:px-24"}>
+            <div className={"lg:sticky top-0 z-50 h-full"}>
+                <div className={"flex flex-col gap-2"}>
+                    <SurveyPrompt/>
+                    <SurveyToolbar save={save} addQuestion={addQuestion}/>
+                    <div>
+                        {errors.length > 0 ? (
+                            <SurveyErrorBlock title={"An error occurred while saving."}>
+                                <div className={"font-light text-sm max-w-sm flex flex-col gap-2"}>
+                                    {errors.map((error) => {
+                                        return (
+                                            <p className={"text-red-400"}>• {error}</p>
+                                        )
+                                    })}
+                                </div>
+                            </SurveyErrorBlock>
+                        ) : null}
+                        {(() => {
+                            let { textBlocks, nonDecoratives } = calculateSizes()
+                            return (
+                                <>
+                                    { textBlocks >= 2 ? (
+                                        <SurveyErrorBlock title={"Maximum Text Blocks Reached"}>
+                                            Currently, you can only add two (2) text blocks at maximum.
+                                            We plan to improve our system even more and support even more characters, choices,
+                                            questions and even more in the future!
+                                        </SurveyErrorBlock>
+                                    ) : null}
+                                    {nonDecoratives >= 5 ? (
+                                        <SurveyErrorBlock title={"Maximum Questions Reached"}>
+                                            Currently, you can only add five (5) questions at maximum.
+                                            We plan to improve our system even more and support even more characters, choices,
+                                            questions and even more in the future!
+                                        </SurveyErrorBlock>
+                                    ) : null}
+                                </>
+                            )
+                        })()}
                     </div>
-                ) : null}
-                {(() => {
-                    let { textBlocks, nonDecoratives } = calculateSizes()
-                    return (
-                        <>
-                            { textBlocks >= 2 ? (
-                                <div className={"flex flex-col gap-2 h-full relative border-zinc-800 backdrop-blur bg-opacity-30 border rounded p-8 my-1"}>
-                                    <div className={"heropattern-graphpaper-zinc-900/50 absolute h-full w-full top-0 left-0 -z-20"}></div>
-                                    <h3 className={`font-bold text-lg`}>Maximum Text Blocks Reached</h3>
-                                    <p className={"font-light text-sm max-w-sm"}>
-                                        Currently, you can only add two (2) text blocks at maximum.
-                                        We plan to improve our system even more and support even more characters, choices,
-                                        questions and even more in the future!
-                                    </p>
-                                </div>
-                            ) : null}
-                            {nonDecoratives >= 5 ? (
-                                <div className={"flex flex-col gap-2 h-full relative border-zinc-800 backdrop-blur bg-opacity-30 border rounded p-8 my-1"}>
-                                    <div className={"heropattern-graphpaper-zinc-900/50 absolute h-full w-full top-0 left-0 -z-20"}></div>
-                                    <h3 className={`font-bold text-lg`}>Maximum Questions Reached</h3>
-                                    <p className={"font-light text-sm max-w-sm"}>
-                                        Currently, you can only add five (5) questions at maximum.
-                                        We plan to improve our system even more and support even more characters, choices,
-                                        questions and even more in the future!
-                                    </p>
-                                </div>
-                            ) : null}
-                        </>
-                    )
-                })()}
-
+                </div>
+            </div>
+            <div className={"flex flex-col gap-2"}>
                 {questions.map((question, index) => {
                     return (
                         <SurveyQuestion
