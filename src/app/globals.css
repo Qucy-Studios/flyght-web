@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-  background: black;
+  background-color: #070707;
   color: white;
 }
 
@@ -14,6 +14,10 @@ body {
 
   .clickable-hover-opacity {
     @apply hover:opacity-60 transition duration-500 ease-in-out
+  }
+
+  .padding-standard {
+    @apply px-8 md:px-12 xl:px-24 pt-4 2xl:py-24;
   }
 }
 

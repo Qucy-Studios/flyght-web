@@ -361,7 +361,7 @@ function SurveySaved() {
                 <div className={"flex flex-col gap-2 h-full relative border-zinc-800 backdrop-blur bg-opacity-30 border rounded p-8"}>
                     <div className={"heropattern-graphpaper-zinc-900/50 absolute h-full w-full top-0 left-0 -z-20"}></div>
                     <h3 className={`font-bold text-lg`}>Survey saved</h3>
-                    <p className={"font-light text-sm max-w-sm"}>
+                    <p className={"font-light text-sm"}>
                        We've saved the survey to your server. As the link is one-time use (for security purposes), you can no longer update
                         the server's survey in this page. If you still want to create some modifications to the survey
                         questions, please go to the Discord application and use the <span className={"text-blue-400 p-0.5 bg-zinc-900 bg-opacity-40 rounded"}>/survey edit</span> command

@@ -16,11 +16,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className + " flex min-h-screen flex-col px-4 md:px-12 xl:px-24 py-12 2xl:py-24 xl:justify-middle xl:align-middle xl:items-center"}>
+      <body className={inter.className + " flex min-h-screen flex-col"}>
         <Header/>
-        <main className={"flex-grow"}>
-          {children}
-        </main>
+        <div className={"padding-standard xl:justify-middle xl:align-middle xl:items-center"}>
+          <main className={"flex-grow w-full"}>
+            {children}
+          </main>
+        </div>
         <Footer/>
       </body>
     </html>

@@ -1,60 +1,68 @@
 "use client";
 
-import {adventPro, ggsans,} from "@/app/_app";
+import {inter, lora, playfairDisplay} from "@/app/_app";
+import {Airplay} from "lucide-react";
 import {SiDiscord} from "@icons-pack/react-simple-icons";
-import {Atom, Lock, LucideMessagesSquare, SmilePlus, Sticker} from "lucide-react";
-import Feature from "@/app/_components/Feature";
+import Emphasis from "@/app/_components/text/Emphasis";
+import DiscordHomepageStack from "@/app/_components/discord/stack/DiscordHomepageStack";
 
 export default function Home() {
     return (
-        <div className="flex flex-col gap-2 py-12">
-            <section id={"hero"} className={"flex flex-col gap-3"}>
-                <h1 className={`${adventPro.className} text-5xl max-w-3xl font-bold text-transparent bg-clip-text bg-gradient-to-b from-slate-100 via-slate-200 to-cyan-300`}>
-                    Know your members before letting them join the server.
-                </h1>
-                <p className={"text-2xl max-w-3xl font-light"}>
-                    Flyght is a Discord bot that brings Know-Your-Member to Discord servers.
-                    Administrators can design a survey for new members to answer before being able to access
-                    the server<a href={"#footnote-1"} className={"text-lg text-blue-400"}>*</a>.
+        <div className="flex flex-col gap-2 w-full px-6 lg:px-16">
+            <section className={`w-full flex flex-col gap-2 pt-16 pb-4 ${lora.className} border-b border-zinc-800`}>
+                <h2 className={`text-5xl font-bold`}>Build a better community</h2>
+                <h3 className={`text-2xl font-medium text-zinc-300`}>by knowing your members.</h3>
+                <p className={"py-4 text-zinc-400 max-w-2xl"}>
+                    Flyght enables server owners to
+                    <b className={"text-zinc-200 font-bold"}> survey new members </b>
+                    right from the Discord application to help servers know what their community wants,
+                    what they are after and what to do to <b className={"text-zinc-200 font-bold"}> build a better community. </b>
                 </p>
-                <p className={"max-w-3xl text-xs"} id={"footnote-1"}>
-                    * Know-Your-Member system sends the responses to a Discord channel where the administrators can
-                    approve or reject the user's join request. Servers can also enable auto-approval to auto-approve new
-                    members.
-                </p>
-                <div className={"my-2 flex flex-row flex-wrap gap-2 items-center"} id={"buttons"}>
-                    <a href={"/invite"}
-                       className={`py-2 px-5 clickable-hover w-full md:w-fit rounded flex flex-row gap-2 items-center bg-blue-700`}>
-                        <SiDiscord/>
-                        <span className={`font-bold ${ggsans.className} text-xl`}>Invite Now</span>
+                <div className={"pb-6 flex flex-row items-center gap-2"}>
+                    <a href={"/invite"} rel={"external"} target={"_blank"} className={`flex flex-row gap-2 items-center clickable-hover-opacity bg-blue-500 text-white w-fit p-2 px-4 font-medium rounded ${inter.className}`}>
+                        <SiDiscord size={24}/>
                     </a>
-                    <a href={"/support"}
-                       className={`py-2 px-5 clickable-hover w-full md:w-fit rounded flex flex-row gap-2 items-center bg-zinc-800`}>
-                        <LucideMessagesSquare size={24} strokeWidth={1.5}/>
-                        <span className={`font-bold ${ggsans.className} text-xl`}>Support</span>
+                    <a href={"/support"} rel={"external"} target={"_blank"} className={`flex flex-row gap-2 items-center clickable-hover-opacity bg-white text-black md:w-fit p-2 px-4 font-medium rounded ${inter.className}`}>
+                        <Airplay size={18}/>
+                        See it in action!
                     </a>
                 </div>
             </section>
-            <section className={"py-8 grid grrd-cols-1 md:grid-cols-2 gap-4 border-t border-zinc-900"}>
-                <Feature title={"Powerful."} Icon={Atom}>
-                    Flyght was designed to support as many kinds of questions as possible
-                    all within the Discord interface, no more answering via an external website, or
-                    related paireed with powerful features such as webhooks and many more!
-                </Feature>
-                <Feature title={"User Friendly."} Icon={SmilePlus}>
-                    Designed with user-experience in mind, Flyght was built to be incredibly user-friendly, making
-                    it quick to be understood by both the administrators and users.
-                </Feature>
-                <Feature title={"Privacy First."} Icon={Lock}>
-                    Flyght's Know Your Member system was built with privacy as one of its core focuses. All responses
-                    are not stored in our databases, they are directly sent to the server's staffs through a designated
-                    text channel.
-                </Feature>
-                <Feature title={"Build better."} Icon={Sticker}>
-                    Create a higher quality community with the Know Your Member system. Know what kind of members you are
-                    coming into your server, and build the best community catered to their tastes.
-                </Feature>
+            <section className={`w-full grid grid-cols-1 md:grid-cols-2 gap-2 py-16 ${lora.className}`}>
+                <div>
+                    <h2 className={`text-5xl font-bold italic text-zinc-300 uppercase ${playfairDisplay.className} pt-4 md:pt-0`}>Privacy First.</h2>
+                    <p className={"py-4 text-zinc-400 max-w-2xl"}>
+                        Flyght
+                        <Emphasis> does not store responses of the user in our databases</Emphasis>.
+                        Only the user and the server staff members can know what was said, silence and peace as it is.
+                    </p>
+                </div>
+                <div>
+                    <h2 className={`text-5xl font-bold italic text-zinc-300 uppercase ${playfairDisplay.className} pt-4 md:pt-16`}>Extensive.</h2>
+                    <p className={"py-4 text-zinc-400"}>
+                        Flyght
+                        <Emphasis> packs as much features as possible within Discord</Emphasis>.
+                        Featuring the latest features of Discord with extensive customizations to make the best experience for new users.
+                    </p>
+                </div>
+                <div>
+                    <h2 className={`text-5xl font-bold italic text-zinc-300 uppercase ${playfairDisplay.className} pt-4 md:pt-0`}>User-Friendly.</h2>
+                    <p className={"py-4 text-zinc-400"}>
+                        Flyght
+                        <Emphasis> is designed with the user experience as the first priority</Emphasis>. We rigorously test the
+                        designs of the service to create a smooth, seamless flow for the user.
+                    </p>
+                </div>
+                <div>
+                    <h2 className={`text-5xl font-bold italic text-zinc-300 uppercase ${playfairDisplay.className} pt-4 md:pt-16`}>Secure.</h2>
+                    <p className={"py-4 text-zinc-400"}>
+                        Flyght
+                        <Emphasis> doesn't ask users to go to another website to answer the surveys</Emphasis>.
+                        Users answer the questions right from the Discord application, giving your users the best sense of security.
+                    </p>
+                </div>
             </section>
+            <DiscordHomepageStack/>
         </div>
     )
 }

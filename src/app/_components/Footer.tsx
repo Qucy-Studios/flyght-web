@@ -3,8 +3,8 @@ import {SiDiscord, SiGithub} from "@icons-pack/react-simple-icons";
 
 export const Footer = () => {
   return (
-      <footer className={"flex flex-col border-t border-t-zinc-900 pt-12 w-full"}>
-          <section className={"flex flex-col gap-1 md:flex-row md:items-center md:justify-between select-none"}>
+      <footer className={"flex flex-col border-t border-t-zinc-900 w-full padding-standard"}>
+          <section className={"flex flex-col gap-1 md:flex-row md:items-center md:justify-between select-none py-12"}>
               <div className={"flex flex-col gap-1 select-none"}>
                   <img src={"/flyght-256px-light.png"} alt={"Flyght Logo (Light)"} className={"w-12 h-12 select-none"}/>
                   <h3 className={`${adventPro.className} lowercase text-4xl`}>Flyght.</h3>
