@@ -15,7 +15,7 @@ type SurveyQuestionChoiceProps = {
 
 const numberFormat = Intl.NumberFormat('en-US')
 
-export default function SurveyQuestionChoice({ emojiPicker, index, option, edit, move, removeIndex }: SurveyQuestionChoiceProps) {
+const SurveyQuestionChoice = ({ emojiPicker, index, option, edit, move, removeIndex }: SurveyQuestionChoiceProps) => {
 
     const [position, setPosition] = useState(index)
     const [choice, setChoice] = useState(option)
@@ -25,8 +25,6 @@ export default function SurveyQuestionChoice({ emojiPicker, index, option, edit,
     useEffect(() => {
         setPosition(index)
         setChoice(option)
-
-        console.info(choice.key)
     }, [index, option]);
 
     return (
@@ -102,3 +100,6 @@ export default function SurveyQuestionChoice({ emojiPicker, index, option, edit,
         </div>
     )
 }
+
+SurveyQuestionChoice.whyDidYouRender = true
+export default SurveyQuestionChoice

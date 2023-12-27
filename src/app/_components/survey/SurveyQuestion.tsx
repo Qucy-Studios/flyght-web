@@ -17,7 +17,7 @@ type SurveyQuestionProps = {
 export const availableKinds = ["Single-choice", "Multi-choice", "Prompt", "Yes or No", "Text Block"]
 const numberFormat = Intl.NumberFormat('en-US')
 
-export default function SurveyQuestion({ index, source, onEdit, onMove, onDelete }: SurveyQuestionProps) {
+const SurveyQuestion = ({ index, source, onEdit, onMove, onDelete }: SurveyQuestionProps) => {
     const [position, setPosition] = useState(index)
     const [showSelectMenu, setShowSelectMenu] = useState(false)
     const [question, setQuestion] = useState(source)
@@ -128,7 +128,9 @@ export default function SurveyQuestion({ index, source, onEdit, onMove, onDelete
                     {availableKinds.map((choice) => {
                         if (choice === question.kind) return null
                         return (
-                            <button onClick={() => {
+                            <button
+                                key={`question-${index}-${choice}`}
+                                onClick={() => {
                                 onEdit({ ...question, kind: choice })
 
                                 setShowSelectMenu(false);
@@ -140,3 +142,6 @@ export default function SurveyQuestion({ index, source, onEdit, onMove, onDelete
         </div>
     )
 }
+
+SurveyQuestion.whyDidYouRender = true
+export default SurveyQuestion
