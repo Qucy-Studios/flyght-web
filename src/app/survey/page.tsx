@@ -187,19 +187,16 @@ export default function SurveyEditor() {
                 if (choice.text.length > 100) {
                     question.errors = [...question.errors, 'A choice cannot be more than 100 characters.']
                     hasErrors = true
-                    break
                 }
 
                 if (choice.text.length === 0) {
                     question.errors = [...question.errors, 'A choice cannot be empty.']
                     hasErrors = true
-                    break
                 }
 
                 if (choice.description != null && choice.description.length > 50) {
                     question.errors = [...question.errors, 'A choice\'s description cannot be more than 100 characters.']
                     hasErrors = true
-                    break
                 }
             }
             if (question.question.length > 1024) {
