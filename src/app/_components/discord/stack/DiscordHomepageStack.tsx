@@ -12,7 +12,7 @@ export default function DiscordHomepageStack() {
 
     return (
         <Chat>
-            <div className={`flex flex-col min-w-full min-h-full ${ggsans.className}`}>
+            <div className={`flex-col min-w-full min-h-full ${ggsans.className}`}>
                 <Message color={"text-white"} avatar={"/flyght-profile.png"} name={"Flyght"} time={"Today at 12:00 A.M"} badge={<BotBadge/>}>
                     <MessageEmbed color="bg-pink-300">
                         <p className={`text-sm font-bold`}>
