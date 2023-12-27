@@ -2,8 +2,14 @@
 export type Question = {
     question: string,
     kind: string,
-    choices: string[],
+    choices: Choice[],
     errors: string[]
+}
+
+export type Choice = {
+    text: string,
+    emoji: string | null,
+    description: string | null
 }
 
 // Native Question are those native to the server, and not to this client.
@@ -11,7 +17,7 @@ export type NativeQuestion = {
     key: string,
     question: string,
     kind: string,
-    choices: string[],
+    choices: Choice[],
 }
 
 export const createRandomKey = (): string => (Math.random() + 1).toString(36).substring(32)

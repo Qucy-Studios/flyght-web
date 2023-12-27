@@ -24,7 +24,6 @@ export default function SurveyEditor() {
     // Flyght Origin (used by setup command)
     const origin = searchParams.get('origin')
 
-    useEffect(() => { window.history.replaceState(null, '', '/survey') }, [accessToken]);
     if (accessToken == null) return (<InvalidLink/>)
 
     const [isLoading, setIsLoading] = useState(true)
@@ -39,6 +38,7 @@ export default function SurveyEditor() {
     const [errors, setErrors] = useState([] as string[])
     useEffect(() => {
         if (!accessToken) return
+        if (openToken) return;
         fetch(`${process.env.NEXT_PUBLIC_BACKEND_ADDRESS}/token/exchange`, {
             method: 'POST',
             headers: {
@@ -182,8 +182,14 @@ export default function SurveyEditor() {
                 hasErrors = true
             }
             for (let choice of question.choices) {
-                if (choice.length > 100) {
+                if (choice.text.length > 100) {
                     question.errors = [...question.errors, 'A choice cannot be more than 100 characters.']
+                    hasErrors = true
+                    break
+                }
+
+                if (choice.description != null && choice.description.length > 50) {
+                    question.errors = [...question.errors, 'A choice\'s description cannot be more than 100 characters.']
                     hasErrors = true
                     break
                 }
