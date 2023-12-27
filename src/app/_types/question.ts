@@ -7,6 +7,7 @@ export type Question = {
 }
 
 export type Choice = {
+    key: string,
     text: string,
     emoji: string | null,
     description: string | null

@@ -12,7 +12,7 @@ import {
     Question
 } from "@/app/_types/question";
 import SurveyQuestion, {availableKinds} from "@/app/_components/survey/SurveyQuestion";
-import {ListChecks, ListTodo, Save, TerminalSquare, Text, ToggleRight} from "lucide-react";
+import {Disc3, ListChecks, ListTodo, Save, TerminalSquare, Text, ToggleRight} from "lucide-react";
 import {Token} from "@/app/_types/token";
 import {Survey} from "@/app/_types/survey";
 
@@ -308,7 +308,7 @@ export default function SurveyEditor() {
                                     <div className={"heropattern-graphpaper-zinc-900/50 absolute h-full w-full top-0 left-0 -z-20"}></div>
                                     <h3 className={`font-bold text-lg`}>Maximum Text Blocks Reached</h3>
                                     <p className={"font-light text-sm max-w-sm"}>
-                                        Currently, you can only add 2 (2) text blocks at maximum.
+                                        Currently, you can only add two (2) text blocks at maximum.
                                         We plan to improve our system even more and support even more characters, choices,
                                         questions and even more in the future!
                                     </p>
@@ -335,11 +335,11 @@ export default function SurveyEditor() {
                             key={question.kind+"-"+index}
                             index={index}
                             source={question}
-                            onEdit={(copy) => {
-                                let listCopy = [...questions]
-                                listCopy[index] = copy
-                                setQuestions(listCopy)
-                            }}
+                            onEdit={(copy) => setQuestions(prevState => {
+                                let cpy = [...prevState]
+                                cpy[index] = copy
+                                return cpy
+                            })}
                             onMove={(kind: 'up' | 'down') => move(kind === 'up', index)}
                             onDelete={() => removeIndex(index)}
                         />
@@ -397,9 +397,9 @@ function SurveySaved() {
 
 function Loading() {
     return (
-        <div className="flex flex-col gap-2 py-12 m-auto align-middle justify-center items-center">
-            <section id={"hero"} className={"flex flex-col gap-3"}>
-                <img src={"/flyght-256px-light.png"} alt={"Flyght Logo (Light)"} className={"animate-bounce duration-700 transition ease-in-out w-12 h-12 select-none"}/>
+        <div className="flex flex-col gap-2 py-12 m-auto align-middle min-h-screen justify-center items-center">
+            <section id={"hero"} className={"flex flex-col gap-3 animate-pulse"}>
+                <Disc3 className={"animate-spin duration-700 transition ease-in-out w-12 h-12 select-none"}>Loading...</Disc3>
             </section>
         </div>
     )
