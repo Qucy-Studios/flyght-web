@@ -12,7 +12,7 @@ import {
     Question
 } from "@/app/_types/question";
 import SurveyQuestion, {availableKinds} from "@/app/_components/survey/SurveyQuestion";
-import {Disc3, ListChecks, ListTodo, Save, TerminalSquare, Text, ToggleRight} from "lucide-react";
+import {Disc3} from "lucide-react";
 import {Token} from "@/app/_types/token";
 import {Survey} from "@/app/_types/survey";
 import SurveyToolbar from "@/app/_components/survey/SurveyToolbar";
