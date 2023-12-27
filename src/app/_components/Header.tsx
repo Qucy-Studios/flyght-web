@@ -14,8 +14,8 @@ export const Header = () => {
                   <a href={"/premium"} rel={"external"} target={"_blank"} className={"text-sm text-yellow-400 clickable-hover-opacity"}>Premium</a>
                   <p className={"text-sm text-zinc-400"}>•</p>
                   <a href={"/invite"}  rel={"external"} target={"_blank"} className={"text-sm text-zinc-400 clickable-hover-opacity"}>Invite</a>
-                  <p className={"text-sm text-zinc-400"}>•</p>
-                  <a href={"/support"} rel={"external"} target={"_blank"} className={"text-sm text-zinc-400 clickable-hover-opacity"}>Support</a>
+                  <p className={"text-sm text-zinc-400 hidden md:block"}>•</p>
+                  <a href={"/support"} rel={"external"} target={"_blank"} className={"text-sm text-zinc-400 clickable-hover-opacity hidden md:block"}>Support</a>
               </div>
           </div>
       </nav>
