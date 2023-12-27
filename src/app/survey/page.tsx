@@ -265,7 +265,7 @@ export default function SurveyEditor() {
     }
 
     return (
-        <div className={"flex flex-col lg:flex-row gap-2 lg:gap-4 py-12 lg:px-24"}>
+        <div className={"flex flex-col lg:flex-row gap-2 lg:gap-4 py-6 lg:px-24 align-middle justify-center"}>
             <div className={"lg:sticky top-0 z-50 h-full"}>
                 <div className={"flex flex-col gap-2"}>
                     <SurveyPrompt/>
