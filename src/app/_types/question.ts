@@ -21,7 +21,16 @@ export type NativeQuestion = {
     choices: Choice[],
 }
 
-export const createRandomKey = (): string => (Math.random() + 1).toString(36).substring(32)
+function dec2hex(dec: number) {
+    return dec.toString(16).padStart(2, "0")
+}
+
+function generateId(len: number) {
+    let arr = new Uint8Array((len || 40) / 2)
+    window.crypto.getRandomValues(arr)
+    return Array.from(arr, dec2hex).join('')
+}
+export const createRandomKey = (): string => generateId(32)
 export const NativeKindMappings = new Map<string, string>(
     [
         ["Prompt", "PROMPT"],
@@ -46,7 +55,9 @@ export function nativeToClient(questions: NativeQuestion[]): Question[] {
     return questions.map((question) => {
        return {
            kind: nativeToClientKind(question.kind),
-           choices: question.choices,
+           choices: question.choices.map((choice) => {
+               return { ...choice, key: createRandomKey() } satisfies Choice
+           }),
            question: question.question,
            errors: []
        } satisfies Question

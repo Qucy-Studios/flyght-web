@@ -25,6 +25,8 @@ export default function SurveyQuestionChoice({ emojiPicker, index, option, edit,
     useEffect(() => {
         setPosition(index)
         setChoice(option)
+
+        console.info(choice.key)
     }, [index, option]);
 
     return (
@@ -47,7 +49,7 @@ export default function SurveyQuestionChoice({ emojiPicker, index, option, edit,
                         className={"bg-transparent outline-none resize-none w-full"}
                         draggable={false}
                         maxRows={1}
-                        placeholder={`Choice ${position + 1}`}
+                        placeholder={`Choice ${position + 1} ${choice.key}`}
                         maxLength={100}
                         defaultValue={choice.text}
                         onInput={(ev) => {
