@@ -1,4 +1,4 @@
-import {ListChecks, ListTodo, Save, TerminalSquare, Text, ToggleRight} from "lucide-react";
+import {ListChecks, ListTodo, Save, Terminal, Text, ToggleRight} from "lucide-react";
 
 export default function SurveyToolbar({ save, addQuestion }: {
     save: () => void,
@@ -7,7 +7,7 @@ export default function SurveyToolbar({ save, addQuestion }: {
     return (
         <div className={"w-full border-zinc-800 backdrop-blur bg-opacity-30 border rounded p-3 px-8 flex flex-row flex-wrap justify-between items-center"}>
             <button onClick={() => addQuestion('Prompt')} className={"clickable-hover-opacity"}>
-                <TerminalSquare size={24}/>
+                <Terminal size={24}/>
             </button>
             <button onClick={() => addQuestion('Single-choice')} className={"clickable-hover-opacity"}>
                 <ListTodo size={24}/>
