@@ -1,11 +1,8 @@
 import {
-    Flower,
     HardDriveUpload,
     ListChecks,
     ListTodo,
-    MessageCircleQuestion,
     Plus,
-    Save,
     Terminal,
     Text,
     ToggleRight
@@ -14,8 +11,7 @@ import {Button} from "@/components/ui/button";
 import {
     DropdownMenu,
     DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
-    DropdownMenuLabel, DropdownMenuPortal,
-    DropdownMenuSeparator, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger,
+    DropdownMenuSeparator,
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 
