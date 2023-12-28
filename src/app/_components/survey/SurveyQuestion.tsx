@@ -28,19 +28,7 @@ const SurveyQuestion = ({ position, question, onEdit, onMove, onDelete }: Survey
     return (
         <div className={"flex flex-col gap-2 pt-1 lg:w-[480px]"}>
             <div className={"w-full border-zinc-800 backdrop-blur bg-opacity-30 border rounded"}>
-                <div className={"py-4 px-8"}>
-                    {question.errors.length > 0 ? (
-                            <div className={"w-full border-zinc-400 bg-zinc-900 backdrop-blur bg-opacity-30 border rounded p-4 my-2"}>
-                                <h3 className={`font-bold text-lg`}>This question has some errors.</h3>
-                                <div className={"font-light text-sm max-w-sm flex flex-col gap-2"}>
-                                    {question.errors.map((error) => {
-                                        return (
-                                            <p className={"text-red-400"}>• {error}</p>
-                                        )
-                                    })}
-                                </div>
-                            </div>
-                    ) : null}
+                <div className={"border-b border-zinc-800 bg-zinc-900 bg-opacity-20 px-8 py-4"}>
                     <div className={`flex flex-row justify-between`}>
                         <div>
                             <h3 className={`font-bold text-lg`}>Question {position + 1}</h3>
@@ -51,6 +39,20 @@ const SurveyQuestion = ({ position, question, onEdit, onMove, onDelete }: Survey
                             <button className={"clickable-hover-opacity text-red-500"} onClick={onDelete}><X size={24}/></button>
                         </div>
                     </div>
+                </div>
+                {question.errors.length > 0 ? (
+                    <div className={"w-full border-zinc-400 bg-zinc-900 backdrop-blur bg-opacity-30 border rounded p-4 my-2"}>
+                        <h3 className={`font-bold text-lg`}>This question has some errors.</h3>
+                        <div className={"font-light text-sm max-w-sm flex flex-col gap-2"}>
+                            {question.errors.map((error) => {
+                                return (
+                                    <p className={"text-red-400"}>• {error}</p>
+                                )
+                            })}
+                        </div>
+                    </div>
+                ) : null}
+                <div className={"border-b border-zinc-800 px-8 py-4"}>
                     <div className={"flex flex-col gap-4 py-4"}>
                         <TextareaAutosize
                             className={"bg-transparent outline-none resize-none"}
@@ -66,6 +68,8 @@ const SurveyQuestion = ({ position, question, onEdit, onMove, onDelete }: Survey
                         />
                         <p className={"text-xs text-zinc-700"}>{numberFormat.format(question.question.length)} / 1,024</p>
                     </div>
+                </div>
+                <div className={"bg-zinc-800 bg-opacity-10 px-8"}>
                     {question.kind === 'Prompt' || question.kind === 'Yes or No' || question.kind === 'Text Block' ? null : (
                         <div className={"flex flex-col gap-2 py-4"}>
                             {question.choices.map((option, pos) => {

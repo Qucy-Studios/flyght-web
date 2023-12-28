@@ -2,7 +2,6 @@ import {Choice} from "@/types/question";
 import {ChevronDown, ChevronUp, Smile, X} from "lucide-react";
 import EmojiPicker, {EmojiStyle, Theme} from "emoji-picker-react";
 import {Dispatch, SetStateAction} from "react";
-import TextareaAutosize from "react-textarea-autosize";
 import {numberFormat} from "@/app";
 
 type SurveyQuestionChoiceProps = {
@@ -18,8 +17,8 @@ const SurveyQuestionChoice = ({ emojiPicker, index, option, edit, move, removeIn
     let [showEmojiPicker, setShowEmojiPicker] = emojiPicker
 
     return (
-        <div className={"bg-zinc-900 bg-opacity-30 border rounded border-zinc-800 p-2 flex flex-col gap-2"}>
-            <div className={"flex flex-row gap-2 justify-between"}>
+        <div className={"bg-zinc-950 bg-opacity-30 border rounded border-zinc-800 flex flex-col gap-2"}>
+            <div className={"flex flex-row gap-2 justify-between p-2"}>
                 <p className={"text-xs text-zinc-700"}>Choice {index + 1}</p>
                 <div className={"flex flex-row gap-2"}>
                     <button onClick={() => move(true, index)} className={"clickable-hover-opacity"}><ChevronUp size={24}/></button>
@@ -27,17 +26,16 @@ const SurveyQuestionChoice = ({ emojiPicker, index, option, edit, move, removeIn
                     <button className={"clickable-hover-opacity text-red-500"} onClick={() => removeIndex(index)}><X size={24}/></button>
                 </div>
             </div>
-            <div className={"flex flex-col items-center gap-4 px-1"}>
+            <div className={"flex flex-col items-center gap-4 px-3 pb-2"}>
                 <div className={"flex flex-row gap-2 items-center w-full"}>
                     <button onClick={() => setShowEmojiPicker(showEmojiPicker === option ? null : option)} className={"px-1 clickable-hover-opacity"}>
                         {option.emoji == null ? <Smile size={24}/> : <p className={"text-[24px]"}>{option.emoji}</p>}
                     </button>
 
-                    <TextareaAutosize
+                    <input type={"text"}
                         className={"bg-transparent outline-none resize-none w-full"}
                         draggable={false}
-                        maxRows={1}
-                        placeholder={`Choice ${index + 1} ${option.key}`}
+                        placeholder={`Choice ${index + 1}`}
                         maxLength={100}
                         defaultValue={option.text}
                         onInput={(ev) => {
@@ -61,30 +59,29 @@ const SurveyQuestionChoice = ({ emojiPicker, index, option, edit, move, removeIn
                         }}
                     />
                 ) : null}
-                <div className={"flex flex-col gap-2 w-full"}>
-                    <p className={"text-xs text-zinc-700"}>Description</p>
-                    <div className={"flex flex-row gap-2 items-center w-full"}>
-                        <TextareaAutosize
-                            className={"bg-transparent outline-none resize-none w-full"}
-                            draggable={false}
-                            maxRows={1}
-                            placeholder={"No description."}
-                            maxLength={50}
-                            defaultValue={option.description ?? ''}
-                            onInput={(ev) => {
+            </div>
+            <div className={"flex flex-col gap-2 w-full border-t border-zinc-800 px-3 py-2 pb-4 bg-zinc-800 bg-opacity-20"}>
+                <p className={"text-xs text-zinc-700"}>Description</p>
+                <div className={"flex flex-row gap-2 items-center w-full"}>
+                    <input type={"text"}
+                        className={"bg-transparent outline-none resize-none w-full"}
+                        draggable={false}
+                        placeholder={"No description."}
+                        maxLength={50}
+                        defaultValue={option.description ?? ''}
+                        onInput={(ev) => {
+                            //@ts-ignore
+                            if (ev.target.value === '') {
                                 //@ts-ignore
-                                if (ev.target.value === '') {
-                                    //@ts-ignore
-                                    edit(index, { key: option.key, text: option.text, emoji: option.emoji, description: null })
-                                    return
-                                }
+                                edit(index, { key: option.key, text: option.text, emoji: option.emoji, description: null })
+                                return
+                            }
 
-                                //@ts-ignore
-                                edit(index, { key: option.key, text: option.text, emoji: option.emoji, description: ev.target.value })
-                            }}
-                        />
-                        <p className={"px-1 text-xs text-zinc-700"}>{numberFormat.format(50 - (option.description?.length ?? 0))}</p>
-                    </div>
+                            //@ts-ignore
+                            edit(index, { key: option.key, text: option.text, emoji: option.emoji, description: ev.target.value })
+                        }}
+                    />
+                    <p className={"px-1 text-xs text-zinc-700"}>{numberFormat.format(50 - (option.description?.length ?? 0))}</p>
                 </div>
             </div>
         </div>
