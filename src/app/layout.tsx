@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
 import './globals.css'
-import {Header} from "@/app/_components/Header";
-import {Footer} from "@/app/_components/Footer";
-import {inter} from "@/app/_app";
+import {Header} from "@/components/Header";
+import {Footer} from "@/components/Footer";
+import {inter} from "@/app";
 
 export const metadata: Metadata = {
   title: 'Flyght',
@@ -15,7 +15,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className={"dark"}>
       <body className={inter.className + " flex min-h-screen flex-col"}>
         <Header/>
         <div className={"padding-standard xl:justify-middle xl:align-middle xl:items-center"}>

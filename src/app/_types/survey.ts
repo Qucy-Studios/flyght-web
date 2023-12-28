@@ -1,4 +1,4 @@
-import {NativeQuestion} from "@/app/_types/question";
+import {NativeQuestion} from "@/types/question";
 
 export type Survey = {
     id: string,

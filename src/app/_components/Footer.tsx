@@ -1,4 +1,4 @@
-import {adventPro} from "@/app/_app";
+import {adventPro} from "@/app";
 import {SiDiscord, SiGithub} from "@icons-pack/react-simple-icons";
 
 export const Footer = () => {

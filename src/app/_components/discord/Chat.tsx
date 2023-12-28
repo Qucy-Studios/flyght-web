@@ -1,5 +1,5 @@
 import React from 'react';
-import {ggsans} from "@/app/_app";
+import {ggsans} from "@/app";
 
 export default function Chat({ children }: { children: React.ReactNode }) {
     return (

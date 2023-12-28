@@ -1,10 +1,10 @@
 "use client";
 
-import {inter, lora, playfairDisplay} from "@/app/_app";
+import {inter, lora, playfairDisplay} from "@/app";
 import {Airplay} from "lucide-react";
 import {SiDiscord} from "@icons-pack/react-simple-icons";
-import Emphasis from "@/app/_components/text/Emphasis";
-import DiscordHomepageStack from "@/app/_components/discord/stack/DiscordHomepageStack";
+import Emphasis from "@/components/text/Emphasis";
+import DiscordHomepageStack from "@/components/discord/stack/DiscordHomepageStack";
 
 export default function Home() {
     return (

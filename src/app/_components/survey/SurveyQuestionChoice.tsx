@@ -1,8 +1,9 @@
-import {Choice} from "@/app/_types/question";
+import {Choice} from "@/types/question";
 import {ChevronDown, ChevronUp, Smile, X} from "lucide-react";
 import EmojiPicker, {EmojiStyle, Theme} from "emoji-picker-react";
-import {Dispatch, SetStateAction, useEffect, useState} from "react";
+import {Dispatch, SetStateAction} from "react";
 import TextareaAutosize from "react-textarea-autosize";
+import {numberFormat} from "@/app";
 
 type SurveyQuestionChoiceProps = {
     emojiPicker: [(Choice | null), Dispatch<SetStateAction<Choice | null>>],
@@ -12,8 +13,6 @@ type SurveyQuestionChoiceProps = {
     move: (up: boolean, index: number) => void,
     removeIndex: (index: number) => void
 }
-
-const numberFormat = Intl.NumberFormat('en-US')
 
 const SurveyQuestionChoice = ({ emojiPicker, index, option, edit, move, removeIndex }: SurveyQuestionChoiceProps) => {
     let [showEmojiPicker, setShowEmojiPicker] = emojiPicker

@@ -1,10 +1,12 @@
 import {ChevronDown, ChevronUp, X} from "lucide-react";
 import TextareaAutosize from "react-textarea-autosize";
 import SlideDown from "react-slidedown";
-import {useEffect, useState} from "react";
-import {Choice, createRandomKey, Question} from "@/app/_types/question";
+import {useState} from "react";
+import {availableQuestionKinds, Choice, createRandomKey, Question} from "@/types/question";
 import 'react-slidedown/lib/slidedown.css'
-import SurveyQuestionChoice from "@/app/_components/survey/SurveyQuestionChoice";
+import SurveyQuestionChoice from "@/components/survey/SurveyQuestionChoice";
+import {numberFormat} from "@/app";
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 
 type SurveyQuestionProps = {
     position: number,
@@ -13,9 +15,6 @@ type SurveyQuestionProps = {
     onMove: (type: 'up' | 'down') => void,
     onDelete: () => void
 }
-
-export const availableKinds = ["Single-choice", "Multi-choice", "Prompt", "Yes or No", "Text Block"]
-const numberFormat = Intl.NumberFormat('en-US')
 
 const SurveyQuestion = ({ position, question, onEdit, onMove, onDelete }: SurveyQuestionProps) => {
     const [showSelectMenu, setShowSelectMenu] = useState(false)
@@ -107,18 +106,29 @@ const SurveyQuestion = ({ position, question, onEdit, onMove, onDelete }: Survey
                     )}
                 </div>
                 <div className={"rounded-b border-t border-zinc-800 py-3 bg-zinc-900 bg-opacity-50 px-4"}>
-                    <div className={"px-4 py-2 bg-zinc-900 w-fit rounded"}>
-                        <button className={"flex flex-row items-center gap-2 clickable-hover-opacity"}
-                                onClick={() => setShowSelectMenu(!showSelectMenu)}>
-                            <p className={"text-sm"}>{question.kind}</p>
-                            {showSelectMenu ? <ChevronUp size={16}/> : <ChevronDown size={16}/>}
-                        </button>
+                    <div className={"w-fit"}>
+                        <Select
+                            value={question.kind}
+                            onValueChange={(value) => {
+                                onEdit({ ...question, kind: value })
+                            }}>
+                            <SelectTrigger>
+                                <SelectValue/>
+                            </SelectTrigger>
+                            <SelectContent>
+                                {availableQuestionKinds.map((choice) => {
+                                    return (
+                                        <SelectItem key={choice} value={choice}>{choice}</SelectItem>
+                                    )
+                                })}
+                            </SelectContent>
+                        </Select>
                     </div>
                 </div>
             </div>
             <SlideDown className={"transition ease-in-out duration-500 pb-2"}>
                 {showSelectMenu ? <div className={"rounded-b border border-zinc-800 py-3 bg-zinc-900 bg-opacity-50 px-4 flex flex-col gap-2 lg:w-fit"}>
-                    {availableKinds.map((choice) => {
+                    {availableQuestionKinds.map((choice) => {
                         if (choice === question.kind) return null
                         return (
                             <button

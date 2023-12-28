@@ -1,22 +1,31 @@
 "use client";
 
 import {useSearchParams} from "next/navigation";
-import SurveyPrompt from "@/app/_components/survey/SurveyPrompt";
+import SurveyPrompt from "@/components/survey/SurveyPrompt";
 import {useEffect, useState} from "react";
 import {
+    availableQuestionKinds,
     clientToNativeKind,
     createRandomKey,
     isNonDecorative,
     NativeQuestion,
     nativeToClient,
-    Question
-} from "@/app/_types/question";
-import SurveyQuestion, {availableKinds} from "@/app/_components/survey/SurveyQuestion";
-import {Disc3} from "lucide-react";
-import {Token} from "@/app/_types/token";
-import {Survey} from "@/app/_types/survey";
-import SurveyToolbar from "@/app/_components/survey/SurveyToolbar";
-import SurveyErrorBlock from "@/app/_components/survey/SurveyErrorBlock";
+    Question, QuestionKinds
+} from "@/types/question";
+import SurveyQuestion from "@/components/survey/SurveyQuestion";
+import {Token} from "@/types/token";
+import {Survey} from "@/types/survey";
+import SurveyToolbar from "@/components/survey/SurveyToolbar";
+import SurveyAlert from "@/components/survey/SurveyAlert";
+import InvalidLink from "@/components/survey/errors/InvalidLink";
+import ErrorMessage from "@/components/survey/errors/ErrorMessage";
+import SurveySaved from "@/components/survey/success/SurveySaved";
+import Loading from "@/components/survey/pending/Loading";
+import {fetchExchangeToken} from "@/requests/fetch_tokens";
+import {fetchSurvey} from "@/requests/fetch_survey";
+import {MAXIMUM_QUESTIONS, MAXIMUM_TEXT_BLOCKS} from "@/constants/maximums";
+import Emphasis from "@/components/text/Emphasis";
+import {updateSurvey} from "@/requests/update_survey";
 
 export default function SurveyEditor() {
 
@@ -30,84 +39,77 @@ export default function SurveyEditor() {
 
     const [isLoading, setIsLoading] = useState(true)
     const [loadError, setLoadError] = useState(null as string | null)
-    const [openToken, setOpenToken] = useState('')
+
+    const [exchangeToken, setExchangeToken] = useState('')
 
     const [existingSurvey, setExistingSurvey] = useState(null as Survey | null)
     const [questions, setQuestions] = useState([] as Question[])
 
-    const [saving, setSaving] = useState(false)
-    const [usedToken, setUsedToken] = useState(false)
+    const [isSaving, setIsSaving] = useState(false)
+    const [isSaved, setSaved] = useState(false)
     const [errors, setErrors] = useState([] as string[])
-    useEffect(() => {
-        if (!accessToken) return
-        if (openToken) return;
-        fetch(`${process.env.NEXT_PUBLIC_BACKEND_ADDRESS}/token/exchange`, {
-            method: 'POST',
-            headers: {
-                Authorization: accessToken,
-            }
-        }).then(async (response) => {
-            if (!response.ok) {
-                try {
-                    const { error } = await response.json() as { code: number, error: string }
-                    setLoadError(error)
-                    setIsLoading(false)
-                } catch (err) {
-                    setLoadError(`Failed to load existing survey, unable to decipher. Server returned a status ${response.status} (${response.statusText}) code.`)
-                    setIsLoading(false)
-                }
+
+    const catchFetchError = (error: any) => {
+        let message = 'Unknown error.'
+        if (error instanceof Error) {
+            message = error.message;
+        } else if (typeof error === 'string') {
+            message = error;
+        }
+        setLoadError(message)
+    }
+
+    const handleBadResponse = async (response: Response) => {
+        try {
+            const { code, error } = await response.json() as { code: number, error: string }
+            if (code === 1) {
                 return
             }
+            setLoadError(error)
+        } catch (err) {
+            setLoadError(`We couldn't load the survey editor. Our machines returned an unknown error with status ${response.statusText} (code ${response.statusText}).`)
+        } finally {
+            setIsLoading(false)
+        }
+        return
+    }
 
-            const token = (await response.json()) as Token
-            setOpenToken(token.key)
-        }).catch((error) => {
-            let message = 'Unknown error.'
-            if (error instanceof Error) {
-                message = error.message;
-            } else if (typeof error === 'string') {
-                message = error;
-            }
-            setLoadError(message)
-        })
-    }, [accessToken]);
+    const loaded = () => setIsLoading(false)
 
     useEffect(() => {
-        if (!openToken) return
-        fetch(`${process.env.NEXT_PUBLIC_BACKEND_ADDRESS}/survey`, {
-            method: 'GET',
-            headers: {
-                Authorization: openToken
-            }
-        }).then(async (response) => {
-            if (!response.ok) {
-                try {
-                    const {  error } = await response.json() as { code: number, error: string }
-                    setLoadError(error)
-                } catch (err) {
-                    setLoadError(`Failed to load existing survey, unable to decipher. Server returned a status ${response.status} (${response.statusText}) code.`)
-                }
-                return
-            }
+        if (accessToken && !exchangeToken) {
+            console.info('Requesting exchange token.')
+            fetchExchangeToken(accessToken)
+                .then(async (response) => {
+                    if (!response.ok) {
+                        return await handleBadResponse(response)
+                    }
 
-            const survey = (await response.json()) as Survey
-            setExistingSurvey(survey)
+                    const token = (await response.json()) as Token
+                    setExchangeToken(token.key)
+                })
+                .catch(catchFetchError)
+        }
 
-            if (survey.questions != null) {
-                setQuestions(nativeToClient(survey.questions) as Question[])
-            }
-        })
-            .then(() => setIsLoading(false))
-            .catch((error) => {
-                let message = 'Unknown error.'
-                if (error instanceof Error) {
-                    message = error.message;
-                } else if (typeof error === 'string') {
-                    message = error;
-                }
-                setLoadError(message)
-            })
-    }, [openToken]);
+        if (exchangeToken) {
+            console.info('Requesting current survey version.')
+            fetchSurvey(exchangeToken)
+                .then(async (response) => {
+                    if (!response.ok) {
+                        return handleBadResponse(response)
+                    }
+
+                    const survey = (await response.json()) as Survey
+                    setExistingSurvey(survey)
+
+                    if (survey.questions != null) {
+                        setQuestions(nativeToClient(survey.questions) as Question[])
+                    }
+                })
+                .then(loaded)
+                .catch(catchFetchError)
+        }
+    }, [accessToken, exchangeToken]);
 
     if (isLoading) {
         return (<Loading/>)
@@ -120,6 +122,11 @@ export default function SurveyEditor() {
     if (existingSurvey == null || questions == null) {
         return (<InvalidLink/>)
     }
+
+    if (isSaved) {
+        return <SurveySaved/>
+    }
+
     function calculateSizes() {
         let [textBlocks, nonDecoratives] = [0, 0]
         for (let question of questions) {
@@ -132,12 +139,12 @@ export default function SurveyEditor() {
         }
         return { textBlocks, nonDecoratives }
     }
-    function addQuestion(kind: "Single-choice" | "Multi-choice" | "Prompt" | "Yes or No" | "Text Block") {
+    function addQuestion(kind: QuestionKinds) {
         const { textBlocks, nonDecoratives } =  calculateSizes()
-        if (kind === 'Text Block' && textBlocks >= 2) return;
-        if (isNonDecorative(kind) && nonDecoratives >= 5)  return;
-        setQuestions([...questions, {choices: [], question: '', kind: kind, errors: []}])
+        if (kind === 'Text Block' && textBlocks >= MAXIMUM_TEXT_BLOCKS) return;
+        if (isNonDecorative(kind) && nonDecoratives >= MAXIMUM_QUESTIONS)  return;
 
+        setQuestions([...questions, {choices: [], question: '', kind: kind, errors: []}])
         setTimeout(() => window.scrollTo({
             top: document.body.scrollHeight,
             behavior: 'smooth'
@@ -161,17 +168,17 @@ export default function SurveyEditor() {
     }
 
     async function save() {
-        if (saving) {
+        if (isSaving) {
             return
         }
 
-        setSaving(true)
+        setIsSaving(true)
         let hasErrors = false
         let copy = [] as Question[]
 
         if (questions.length < 1) {
             setErrors(["You cannot save an empty survey. Please add at least one question."])
-            setSaving(false)
+            setIsSaving(false)
             return
         }
 
@@ -207,7 +214,7 @@ export default function SurveyEditor() {
                 question.errors = [...question.errors, 'You can only write up to 1,024 characters for the question.']
                 hasErrors = true
             }
-            if (!availableKinds.includes(question.kind)) {
+            if (!availableQuestionKinds.includes(question.kind)) {
                 question.errors = [...question.errors, `Unknown question kind. [kind=${question.kind}]`]
                 hasErrors = true
             }
@@ -236,39 +243,26 @@ export default function SurveyEditor() {
             }
 
             try {
-                const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_ADDRESS}/survey`, {
-                    method: 'POST',
-                    //@ts-ignore
-                    headers: {
-                        Authorization: openToken,
-                        'Content-Type': 'application/json',
-                        'X-Flyght-Origin': origin ?? undefined
-                    },
-                    body: JSON.stringify(native)
-                })
+                const response = await updateSurvey(exchangeToken, origin, native)
                 if (!response.ok) {
                     try {
                         const {  error } = await response.json() as { code: number, error: string }
                         setErrors([error])
                     } catch (err) {
                         setErrors([
-                            `Failed to save survey, unable to decipher. Server returned a status ${response.status} (${response.statusText}) code.`
+                            `We couldn't save the survey. Our machines returned an unknown error with status ${response.statusText} (code ${response.statusText}).`
                         ])
                     }
-                    setSaving(false)
+                    setIsSaving(false)
                     return
                 }
-                setUsedToken(true)
+                setSaved(true)
             } catch (err) {
                 setErrors([`Failed to save survey: ${err}`])
             }
         }
 
-        setSaving(false)
-    }
-
-    if (usedToken) {
-        return <SurveySaved/>
+        setIsSaving(false)
     }
 
     return (
@@ -279,7 +273,7 @@ export default function SurveyEditor() {
                     <SurveyToolbar save={save} addQuestion={addQuestion}/>
                     <div>
                         {errors.length > 0 ? (
-                            <SurveyErrorBlock title={"An error occurred while saving."}>
+                            <SurveyAlert title={"An error occurred while saving."}>
                                 <div className={"font-light text-sm max-w-sm flex flex-col gap-2"}>
                                     {errors.map((error) => {
                                         return (
@@ -287,25 +281,24 @@ export default function SurveyEditor() {
                                         )
                                     })}
                                 </div>
-                            </SurveyErrorBlock>
+                            </SurveyAlert>
                         ) : null}
                         {(() => {
                             let { textBlocks, nonDecoratives } = calculateSizes()
                             return (
                                 <>
-                                    { textBlocks >= 2 ? (
-                                        <SurveyErrorBlock title={"Maximum Text Blocks Reached"}>
-                                            Currently, you can only add two (2) text blocks at maximum.
-                                            We plan to improve our system even more and support even more characters, choices,
-                                            questions and even more in the future!
-                                        </SurveyErrorBlock>
+                                    { textBlocks >= MAXIMUM_TEXT_BLOCKS ? (
+                                        <SurveyAlert title={"You can no longer add more text blocks."}>
+                                            Currently, each survey can only contain <Emphasis>{MAXIMUM_TEXT_BLOCKS} text blocks</Emphasis>.
+                                            We are looking for ways to expand this limit, so stay tuned!
+                                        </SurveyAlert>
                                     ) : null}
                                     {nonDecoratives >= 5 ? (
-                                        <SurveyErrorBlock title={"Maximum Questions Reached"}>
+                                        <SurveyAlert title={"You can no longer add more questions."}>
                                             Currently, you can only add five (5) questions at maximum.
                                             We plan to improve our system even more and support even more characters, choices,
                                             questions and even more in the future!
-                                        </SurveyErrorBlock>
+                                        </SurveyAlert>
                                     ) : null}
                                 </>
                             )
@@ -331,61 +324,6 @@ export default function SurveyEditor() {
                     )
                 })}
             </div>
-        </div>
-    )
-}
-
-function InvalidLink() {
-    return (
-        <div className="flex flex-col gap-2 py-12">
-            <section id={"hero"} className={"flex flex-col gap-3"}>
-                <p className={"text-2xl max-w-3xl font-light"}>
-                    Oops, you cannot use the survey editor with an invalid link. Try generating
-                    a proper link using the <span className={"text-blue-400 p-0.5 bg-zinc-900 bg-opacity-40 rounded"}>/survey edit</span> command
-                    in the Discord bot of the server that you want to edit the survey of.
-                </p>
-            </section>
-        </div>
-    )
-}
-
-function ErrorMessage({ error }: { error: string }) {
-    return (
-        <div className="flex flex-col gap-2 py-12">
-            <section id={"hero"} className={"flex flex-col gap-3"}>
-                <p className={"text-2xl max-w-3xl font-light"}>
-                    Oops, something went wrong while trying to load the survey editor: {error}
-                </p>
-            </section>
-        </div>
-    )
-}
-
-function SurveySaved() {
-    return (
-        <div className="flex flex-col gap-2 py-12">
-            <section id={"hero"} className={"flex flex-col gap-3"}>
-                <div className={"flex flex-col gap-2 h-full relative border-zinc-800 backdrop-blur bg-opacity-30 border rounded p-8"}>
-                    <div className={"heropattern-graphpaper-zinc-900/50 absolute h-full w-full top-0 left-0 -z-20"}></div>
-                    <h3 className={`font-bold text-lg`}>Survey saved</h3>
-                    <p className={"font-light text-sm"}>
-                       We've saved the survey to your server. As the link is one-time use (for security purposes), you can no longer update
-                        the server's survey in this page. If you still want to create some modifications to the survey
-                        questions, please go to the Discord application and use the <span className={"text-blue-400 p-0.5 bg-zinc-900 bg-opacity-40 rounded"}>/survey edit</span> command
-                        on the server that you want to edit the survey questions of.
-                    </p>
-                </div>
-            </section>
-        </div>
-    )
-}
-
-function Loading() {
-    return (
-        <div className="flex flex-col gap-2 py-12 m-auto align-middle min-h-screen justify-center items-center">
-            <section id={"hero"} className={"flex flex-col gap-3 animate-pulse"}>
-                <Disc3 className={"animate-spin duration-700 transition ease-in-out w-12 h-12 select-none"}>Loading...</Disc3>
-            </section>
         </div>
     )
 }

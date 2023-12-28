@@ -1,7 +1,8 @@
-import {Advent_Pro, Inter, Josefin_Sans, Lora, Playfair_Display} from 'next/font/google'
+import {Advent_Pro, Inter, Lora, Playfair_Display} from 'next/font/google'
 import localFont from 'next/font/local'
 import './wdyr'
 
+export const numberFormat = Intl.NumberFormat('en-US')
 export const adventPro = Advent_Pro({
     subsets:  ['latin'],
     variable: '--font-advent-pro',

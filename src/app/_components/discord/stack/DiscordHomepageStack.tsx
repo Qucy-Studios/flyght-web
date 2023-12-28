@@ -1,10 +1,10 @@
 "use client";
 
-import {ggsans} from "@/app/_app";
-import Message from "@/app/_components/discord/Message";
-import BotBadge from "@/app/_components/discord/BotBadge";
-import MessageEmbed from "@/app/_components/discord/Embed";
-import Chat from "@/app/_components/discord/Chat";
+import {ggsans} from "@/app";
+import Message from "@/components/discord/Message";
+import BotBadge from "@/components/discord/BotBadge";
+import MessageEmbed from "@/components/discord/Embed";
+import Chat from "@/components/discord/Chat";
 import {useState} from "react";
 
 export default function DiscordHomepageStack() {

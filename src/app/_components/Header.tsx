@@ -1,6 +1,6 @@
 "use client";
 
-import {lora} from "@/app/_app";
+import {lora} from "@/app";
 import {usePathname} from "next/navigation";
 
 export const Header = () => {

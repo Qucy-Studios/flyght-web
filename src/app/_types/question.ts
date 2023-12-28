@@ -13,6 +13,9 @@ export type Choice = {
     description: string | null
 }
 
+export type QuestionKinds = "Single-choice" | "Multi-choice" | "Prompt" | "Yes or No" | "Text Block"
+export const availableQuestionKinds = ["Single-choice", "Multi-choice", "Prompt", "Yes or No", "Text Block"]
+
 // Native Question are those native to the server, and not to this client.
 export type NativeQuestion = {
     key: string,
