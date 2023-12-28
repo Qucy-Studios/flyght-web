@@ -41,14 +41,18 @@ const SurveyQuestion = ({ position, question, onEdit, onMove, onDelete }: Survey
                     </div>
                 </div>
                 {question.errors.length > 0 ? (
-                    <div className={"w-full border-zinc-400 bg-zinc-900 backdrop-blur bg-opacity-30 border rounded p-4 my-2"}>
-                        <h3 className={`font-bold text-lg`}>This question has some errors.</h3>
-                        <div className={"font-light text-sm max-w-sm flex flex-col gap-2"}>
-                            {question.errors.map((error) => {
-                                return (
-                                    <p className={"text-red-400"}>• {error}</p>
-                                )
-                            })}
+                    <div className={"w-full border-zinc-800 bg-zinc-900 backdrop-blur bg-opacity-30 border-b rounded p-4"}>
+                        <h3 className={`font-bold text-lg text-red-500`}>There are some issues with this question.</h3>
+                        <div className={"font-light text-sm flex flex-col gap-2"}>
+                            <p>We failed to save the survey because there are some issues with this question,
+                                please try to resolve the following issues:</p>
+                            <div className={"flex flex-col gap-2 pl-4"}>
+                                {question.errors.map((error) => {
+                                    return (
+                                        <p className={"text-red-400"}>• {error}</p>
+                                    )
+                                })}
+                            </div>
                         </div>
                     </div>
                 ) : null}
