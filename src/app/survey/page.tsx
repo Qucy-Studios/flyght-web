@@ -24,8 +24,10 @@ import Loading from "@/components/survey/pending/Loading";
 import {fetchExchangeToken} from "@/requests/fetch_tokens";
 import {fetchSurvey} from "@/requests/fetch_survey";
 import {MAXIMUM_QUESTIONS, MAXIMUM_TEXT_BLOCKS} from "@/constants/maximums";
-import Emphasis from "@/components/text/Emphasis";
 import {updateSurvey} from "@/requests/update_survey";
+import MaximumTextBlockDialog from "@/components/dialogs/MaximumTextBlockDialog";
+import MaximumQuestionsDialog from "@/components/dialogs/MaximumQuestionsDialog";
+import ContinueSaveDialog from "@/components/dialogs/ContinueSaveDialog";
 
 export default function SurveyEditor() {
 
@@ -48,6 +50,11 @@ export default function SurveyEditor() {
     const [isSaving, setIsSaving] = useState(false)
     const [isSaved, setSaved] = useState(false)
     const [errors, setErrors] = useState([] as string[])
+
+    const [showMaximumTextBlocksWarning, setShowMaximumTextBlocksWarning] = useState(false)
+    const [showMaximumQuestionsWarning, setShowMaximumQuestionsWarning] = useState(false)
+
+    const [showSaveDialog, setShowSaveDialog] = useState(false)
 
     const catchFetchError = (error: any) => {
         let message = 'Unknown error.'
@@ -139,10 +146,15 @@ export default function SurveyEditor() {
         }
         return { textBlocks, nonDecoratives }
     }
+
     function addQuestion(kind: QuestionKinds) {
         const { textBlocks, nonDecoratives } =  calculateSizes()
-        if (kind === 'Text Block' && textBlocks >= MAXIMUM_TEXT_BLOCKS) return;
-        if (isNonDecorative(kind) && nonDecoratives >= MAXIMUM_QUESTIONS)  return;
+        if (kind === 'Text Block' && textBlocks >= MAXIMUM_TEXT_BLOCKS) {
+            return setShowMaximumTextBlocksWarning(true)
+        }
+        if (isNonDecorative(kind) && nonDecoratives >= MAXIMUM_QUESTIONS) {
+            return setShowMaximumQuestionsWarning(true)
+        }
 
         setQuestions([...questions, {choices: [], question: '', kind: kind, errors: []}])
         setTimeout(() => window.scrollTo({
@@ -167,19 +179,22 @@ export default function SurveyEditor() {
         })
     }
 
-    async function save() {
-        if (isSaving) {
+    async function promptSave() {
+        const isInvalid = validate()
+        if (isInvalid) {
             return
         }
 
-        setIsSaving(true)
+        setShowSaveDialog(true)
+    }
+
+    function validate(): boolean {
         let hasErrors = false
         let copy = [] as Question[]
 
         if (questions.length < 1) {
             setErrors(["You cannot save an empty survey. Please add at least one question."])
-            setIsSaving(false)
-            return
+            return true
         }
 
         for (let question of questions) {
@@ -221,6 +236,16 @@ export default function SurveyEditor() {
             copy = [...copy, question]
         }
         setQuestions(copy)
+        return hasErrors
+    }
+
+    async function save() {
+        if (isSaving) {
+            return
+        }
+
+        setIsSaving(true)
+        const hasErrors = validate()
 
         if (!hasErrors) {
             let native = [] as NativeQuestion[]
@@ -263,6 +288,7 @@ export default function SurveyEditor() {
         }
 
         setIsSaving(false)
+        setShowSaveDialog(false)
     }
 
     return (
@@ -270,7 +296,7 @@ export default function SurveyEditor() {
             <div className={"lg:sticky top-0 z-50 h-full"}>
                 <div className={"flex flex-col gap-2"}>
                     <SurveyPrompt/>
-                    <SurveyToolbar save={save} addQuestion={addQuestion}/>
+                    <SurveyToolbar save={promptSave} addQuestion={addQuestion}/>
                     <div>
                         {errors.length > 0 ? (
                             <SurveyAlert title={"An error occurred while saving."}>
@@ -283,26 +309,9 @@ export default function SurveyEditor() {
                                 </div>
                             </SurveyAlert>
                         ) : null}
-                        {(() => {
-                            let { textBlocks, nonDecoratives } = calculateSizes()
-                            return (
-                                <>
-                                    { textBlocks >= MAXIMUM_TEXT_BLOCKS ? (
-                                        <SurveyAlert title={"You can no longer add more text blocks."}>
-                                            Currently, each survey can only contain <Emphasis>{MAXIMUM_TEXT_BLOCKS} text blocks</Emphasis>.
-                                            We are looking for ways to expand this limit, so stay tuned!
-                                        </SurveyAlert>
-                                    ) : null}
-                                    {nonDecoratives >= 5 ? (
-                                        <SurveyAlert title={"You can no longer add more questions."}>
-                                            Currently, you can only add five (5) questions at maximum.
-                                            We plan to improve our system even more and support even more characters, choices,
-                                            questions and even more in the future!
-                                        </SurveyAlert>
-                                    ) : null}
-                                </>
-                            )
-                        })()}
+                        <ContinueSaveDialog open={showSaveDialog} onClose={() => setShowSaveDialog(false)} onSave={save} saving={isSaving}/>
+                        <MaximumQuestionsDialog open={showMaximumQuestionsWarning} onClose={() => setShowMaximumQuestionsWarning(false)}/>
+                        <MaximumTextBlockDialog open={showMaximumTextBlocksWarning} onClose={() => setShowMaximumTextBlocksWarning(false)}/>
                     </div>
                 </div>
             </div>
