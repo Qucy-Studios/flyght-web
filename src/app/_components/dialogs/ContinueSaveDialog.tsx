@@ -19,7 +19,11 @@ type ContinueSaveDialogProps = {
 }
 export default function ContinueSaveDialog({ open, onClose, onSave, saving }: ContinueSaveDialogProps) {
     return (
-        <Dialog open={open}>
+        <Dialog open={open} onOpenChange={(open) => {
+            if (!open) {
+                onClose()
+            }
+        }}>
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle className={"text-yellow-500"}>Are you sure you want to save?</DialogTitle>
@@ -29,8 +33,8 @@ export default function ContinueSaveDialog({ open, onClose, onSave, saving }: Co
                     </DialogDescription>
                 </DialogHeader>
                 <DialogFooter className="sm:justify-start">
-                    <DialogClose asChild>
-                        <Button onClick={onClose} type="button" variant="secondary" disabled={!saving}>
+                    <DialogClose  asChild>
+                        <Button onClick={onClose} type="button" variant="secondary" disabled={saving} className={"my-2 md:my-0"}>
                             Cancel
                         </Button>
                     </DialogClose>

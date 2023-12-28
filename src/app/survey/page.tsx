@@ -245,50 +245,52 @@ export default function SurveyEditor() {
         }
 
         setIsSaving(true)
-        const hasErrors = validate()
+        try {
+            const hasErrors = validate()
 
-        if (!hasErrors) {
-            let native = [] as NativeQuestion[]
-            const generateKey = (): string => {
-                let key = createRandomKey()
-                for (let nativeQuestion of native) {
-                    if (nativeQuestion.key !== '' && nativeQuestion.key === key) {
-                        return generateKey()
+            if (!hasErrors) {
+                let native = [] as NativeQuestion[]
+                const generateKey = (): string => {
+                    let key = createRandomKey()
+                    for (let nativeQuestion of native) {
+                        if (nativeQuestion.key !== '' && nativeQuestion.key === key) {
+                            return generateKey()
+                        }
                     }
+                    return key
                 }
-                return key
-            }
-            for (let question of questions) {
-                native = [...native, {
-                    key: generateKey(),
-                    kind: clientToNativeKind(question.kind),
-                    choices: question.choices,
-                    question: question.question
-                }]
-            }
+                for (let question of questions) {
+                    native = [...native, {
+                        key: generateKey(),
+                        kind: clientToNativeKind(question.kind),
+                        choices: question.choices,
+                        question: question.question
+                    }]
+                }
 
-            try {
-                const response = await updateSurvey(exchangeToken, origin, native)
-                if (!response.ok) {
-                    try {
-                        const {  error } = await response.json() as { code: number, error: string }
-                        setErrors([error])
-                    } catch (err) {
-                        setErrors([
-                            `We couldn't save the survey. Our machines returned an unknown error with status ${response.statusText} (code ${response.statusText}).`
-                        ])
+                try {
+                    const response = await updateSurvey(exchangeToken, origin, native)
+                    if (!response.ok) {
+                        try {
+                            const {  error } = await response.json() as { code: number, error: string }
+                            setErrors([error])
+                        } catch (err) {
+                            setErrors([
+                                `We couldn't save the survey. Our machines returned an unknown error with status ${response.statusText} (code ${response.statusText}).`
+                            ])
+                        }
+                        setIsSaving(false)
+                        return
                     }
-                    setIsSaving(false)
-                    return
+                    setSaved(true)
+                } catch (err) {
+                    setErrors([`Failed to save survey: ${err}`])
                 }
-                setSaved(true)
-            } catch (err) {
-                setErrors([`Failed to save survey: ${err}`])
             }
+        } finally {
+            setIsSaving(false)
+            setShowSaveDialog(false)
         }
-
-        setIsSaving(false)
-        setShowSaveDialog(false)
     }
 
     return (

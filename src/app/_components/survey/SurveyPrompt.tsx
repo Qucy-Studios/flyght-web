@@ -1,5 +1,3 @@
-import {ListChecks, ListTodo, Terminal, Text, ToggleRight} from "lucide-react";
-
 export default function SurveyPrompt() {
     return (
         <div className={"flex flex-col gap-2 relative border-zinc-800 backdrop-blur bg-opacity-30 border rounded p-8"}>
@@ -13,17 +11,6 @@ export default function SurveyPrompt() {
                 To remove questions, click the <span className={"text-red-400"}>X</span> icon on the question.
                 <br/>
                 To add questions to the survey, use the tool bar below.
-                <br/>
-                <br/>
-                <span className={"text-blue-400 inline-block"}><Terminal size={18}/></span> will add a <b>prompt</b> question.
-                <br/>
-                <span className={"text-blue-400 inline-block"}><ListTodo size={18}/></span> will add a <b>single-choice</b> question.
-                <br/>
-                <span className={"text-blue-400 inline-block"}><ListChecks size={18}/></span> will add a <b>multi-choice</b> question.
-                <br/>
-                <span className={"text-blue-400 inline-block"}><ToggleRight size={18}/></span> will add a <b>yes or no</b> question.
-                <br/>
-                <span className={"text-blue-400 inline-block"}><Text size={18}/></span> will add a <b>text block</b> (non-question).
             </p>
         </div>
     )

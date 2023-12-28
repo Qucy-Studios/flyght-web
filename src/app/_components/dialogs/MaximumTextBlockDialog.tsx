@@ -14,7 +14,11 @@ import Emphasis from "@/components/text/Emphasis";
 
 export default function MaximumTextBlockDialog({ open, onClose }: { open: boolean, onClose: () => void }) {
     return (
-        <Dialog open={open}>
+        <Dialog open={open} onOpenChange={(open) => {
+            if (!open) {
+                onClose()
+            }
+        }}>
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle className={"text-red-500"}>You cannot add any more text blocks.</DialogTitle>
