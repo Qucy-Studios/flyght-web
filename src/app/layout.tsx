@@ -3,6 +3,7 @@ import './globals.css'
 import {Header} from "@/components/Header";
 import {Footer} from "@/components/Footer";
 import {inter} from "@/app";
+import {Toaster} from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
   title: 'Flyght',
@@ -24,6 +25,7 @@ export default function RootLayout({
           </main>
         </div>
         <Footer/>
+        <Toaster/>
       </body>
     </html>
   )

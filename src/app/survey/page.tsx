@@ -28,8 +28,10 @@ import {updateSurvey} from "@/requests/update_survey";
 import MaximumTextBlockDialog from "@/components/dialogs/MaximumTextBlockDialog";
 import MaximumQuestionsDialog from "@/components/dialogs/MaximumQuestionsDialog";
 import ContinueSaveDialog from "@/components/dialogs/ContinueSaveDialog";
+import {useToast} from "@/components/ui/use-toast";
 
 export default function SurveyEditor() {
+    const { toast } = useToast()
 
     const searchParams = useSearchParams()
     const accessToken = searchParams.get('access_token')
@@ -236,6 +238,14 @@ export default function SurveyEditor() {
             copy = [...copy, question]
         }
         setQuestions(copy)
+
+        if (hasErrors) {
+            toast({
+                variant: "destructive",
+                title: "Uh oh!",
+                description: "We cannot save your survey because there are some errors, please resolve them first!"
+            })
+        }
         return hasErrors
     }
 
