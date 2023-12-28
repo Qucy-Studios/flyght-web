@@ -47,6 +47,7 @@ const SurveyQuestionChoice = ({ emojiPicker, index, option, edit, move, removeIn
                 </div>
                 {showEmojiPicker === option ? (
                     <EmojiPicker
+                        autoFocusSearch={false}
                         emojiStyle={EmojiStyle.NATIVE}
                         className={"py-2 max-w-[98%] border-zinc-800 border bg-zinc-800 bg-opacity-30"}
                         theme={Theme.DARK}
