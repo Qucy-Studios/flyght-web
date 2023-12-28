@@ -39,7 +39,7 @@ export default function Home() {
                         </p>
                     </div>
                     <div>
-                        <h2 className={`text-5xl font-bold italic text-zinc-300 uppercase ${playfairDisplay.className} pt-4 md:pt-16`}>Extensive.</h2>
+                        <h2 className={`text-5xl font-bold italic text-zinc-300 uppercase ${playfairDisplay.className} pt-4 md:pt-16`}>Cool.</h2>
                         <p className={"py-4 text-zinc-400"}>
                             Flyght
                             <Emphasis> packs as much features as possible within Discord</Emphasis>.
