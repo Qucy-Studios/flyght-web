@@ -106,9 +106,9 @@ const SurveyQuestion = ({ position, question, onEdit, onMove, onDelete }: Survey
                                 )
                             })}
                             {question.choices.length >= 10 ? (
-                                <p className={"w-fit text-sm max-w-sm pt-2 text-zinc-300 clickable-hover-opacity"}>You can only add 10 choices.</p>
+                                <p className={"w-fit text-sm max-w-sm text-zinc-300 clickable-hover-opacity"}>You can only add 10 choices.</p>
                             ) : (
-                                <button className={"w-fit text-sm max-w-sm pt-2 text-zinc-300 clickable-hover-opacity"} onClick={addOption}>Add option</button>
+                                <button className={"w-fit text-sm max-w-sm text-zinc-300 clickable-hover-opacity"} onClick={addOption}>Add option</button>
                     )}
                         </div>
                     )}
