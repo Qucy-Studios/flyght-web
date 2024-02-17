@@ -74,6 +74,25 @@ const SurveyQuestion = ({ position, question, onEdit, onMove, onDelete }: Survey
                     </div>
                 </div>
                 <div className={"bg-zinc-800 bg-opacity-10 px-8"}>
+                    {question.kind === 'Prompt' ? (
+                            <div className={"flex flex-col gap-2 py-4"}>
+                                <div className={"flex flex-col gap-4 py-4"}>
+                                    <TextareaAutosize
+                                        className={"bg-transparent outline-none resize-none"}
+                                        draggable={false}
+                                        maxRows={2}
+                                        placeholder={"What would you like to write as a placeholder?"}
+                                        maxLength={100}
+                                        defaultValue={question.placeholder}
+                                        onInput={(ev) => {
+                                            //@ts-ignore
+                                            onEdit({ ...question, placeholder: ev.target.value})
+                                        }}
+                                    />
+                                    <p className={"text-xs text-zinc-700"}>{numberFormat.format(question.placeholder.length)} / 100</p>
+                                </div>
+                            </div>
+                    ) : null}
                     {question.kind === 'Prompt' || question.kind === 'Yes or No' || question.kind === 'Text Block' ? null : (
                         <div className={"flex flex-col gap-2 py-4"}>
                             {question.choices.map((option, pos) => {

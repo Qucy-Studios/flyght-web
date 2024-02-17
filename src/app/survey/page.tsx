@@ -158,7 +158,7 @@ export default function SurveyEditor() {
             return setShowMaximumQuestionsWarning(true)
         }
 
-        setQuestions([...questions, {choices: [], question: '', kind: kind, errors: []}])
+        setQuestions([...questions, {choices: [], question: '', kind: kind, errors: [], placeholder: ""}])
         setTimeout(() => window.scrollTo({
             top: document.body.scrollHeight,
             behavior: 'smooth'
@@ -274,7 +274,8 @@ export default function SurveyEditor() {
                         key: generateKey(),
                         kind: clientToNativeKind(question.kind),
                         choices: question.choices,
-                        question: question.question
+                        question: question.question,
+                        placeholder: question.placeholder.length < 1 ? null : question.placeholder
                     }]
                 }
 

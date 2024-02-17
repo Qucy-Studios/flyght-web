@@ -3,6 +3,7 @@ export type Question = {
     question: string,
     kind: string,
     choices: Choice[],
+    placeholder: string,
     errors: string[]
 }
 
@@ -21,6 +22,7 @@ export type NativeQuestion = {
     key: string,
     question: string,
     kind: string,
+    placeholder: string | null,
     choices: Choice[],
 }
 
@@ -61,6 +63,7 @@ export function nativeToClient(questions: NativeQuestion[]): Question[] {
            choices: question.choices.map((choice) => {
                return { ...choice, key: createRandomKey() } satisfies Choice
            }),
+           placeholder: question.placeholder ?? "",
            question: question.question,
            errors: []
        } satisfies Question
